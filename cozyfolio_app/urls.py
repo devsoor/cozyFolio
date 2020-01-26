@@ -1,0 +1,25 @@
+from django.urls import path     
+from . import views
+urlpatterns = [
+    path('home', views.signin),	      
+    path('', views.index),	      
+    path('register', views.register),	      
+    path('registerUser', views.registerUser),	      
+    path('login', views.login),	      
+    path('signin', views.signin),	      
+    path('logout', views.logout),
+    path('forgotPassword', views.forgotPassword),
+    path('forgotPasswordSendEmail', views.forgotPasswordSendEmail),
+    path('setNewPassword', views.setNewPassword),
+    path('dashboard', views.dashboard),
+    path('projectEdit/<int:id>', views.editProject),
+    # path('cozyfolio/portfolio//view/<int:id>', views.view_portfolio),
+    # path('cozyfolio/portfolio/new', views.new_portfolio),
+    # path('cozyfolio/portfolio/create', views.create_portfolio),
+    # path('cozyfolio/portfolio/edit/<int:id>', views.edit_portfolio),
+    # path('cozyfolio/portfolio/remove/<int:id>', views.remove_portfolio),
+    # path('cozyfolio/project/<int:id>', views.view_project),
+    # path('cozyfolio/project/new', views.new_project),
+    # path('cozyfolio/project/create', views.create_project),
+    # path('cozyfolio/project/remove/<int:id>', views.remove_project),
+]
