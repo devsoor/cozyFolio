@@ -79,5 +79,25 @@ class User(models.Model):
     def __repr__(self):
         return f"User object: {self.id} {self.firstName} {self.lastName}"
 
-
+class Portfolio(models.Model):
+    name = models.CharField(max_length=75)
+    title = models.CharField(max_length=100, null=True)
+    portfolioSummary = models.TextField(null=True)
+    resume = models.FileField(upload_to='uploads/', null=True)
+    created_at = models.DateField(default=datetime.now)
+    updated_at = models.DateField(auto_now=True)
+    user = models.ForeignKey(User, related_name = "portfolio", on_delete = models.CASCADE, null = True)
+    
+class Project(models.Model):
+    name = models.CharField(max_length=75)
+    summary = models.TextField(null=True)
+    techUsed = models.TextField(null=True)
+    team = models.TextField(null=True)
+    process = models.TextField(null=True)
+    # video and slide best field?
+    # projectVideo = models.ImageField(upload_to='uploads/', null=True)
+    # slides = models.FileField(upload_to='uploads/', null=True)
+    created_at = models.DateField(default=datetime.now)
+    updated_at = models.DateField(auto_now=True)
+    portfolio = models.ManyToManyField(Portfolio, related_name = "project")
 
