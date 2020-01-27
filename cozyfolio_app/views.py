@@ -7,6 +7,15 @@ import pytz
 import pprint
 from django.db.models import Q
 
+#create arr of lang list create arr of social media, two methods initializing the two models
+langList =["Python","JavaScript", "HTML/CSS","Java", "C/C++","Swift","TypeScript","Go","SQL","Ruby","R",
+"PHP","Perl","Kotlin","C#","Rust","Scheme","Erlang","Scala","Elixir","Haskell","Basic"]
+frameworkList = ["Ruby on Rails", 'Django', "Laravel", 'Symfony', 'Meteor', "Angular", "Yii", "Play", "React", "Flask", "Phoenix", 
+"Spring", "CakePHP", "Vue", "TensorFlow", "PyTorch","Sonnet","Keras","MXNet", "Gluon","Chainer","DL4J","ONNX"]
+databaseList = ["MySQL", "Microsoft SQL Server", "PostgreSQL", "IBM Db2 Family", "Microsoft Access", "MariaDB", 
+"SQLite", "IBM Informix", "MongoDB", "Redis"]
+        # Skill.objects.create(languages = langList, frameworks = frameworkList, databases = databaseList, other = otherList)
+
 
 def index(request):
     return render(request, "index.html")
@@ -20,7 +29,6 @@ def registerUser(request):
         # redirect to stay on same page
         return redirect(request.META.get('HTTP_REFERER'))
     else:
-        level = "normal"
         registerFormFirstName = request.POST['registerFormFirstName']
         registerFormLastName = request.POST['registerFormLastName']
         registerFormEmail = request.POST['registerFormEmail']
@@ -32,13 +40,13 @@ def registerUser(request):
         if len(this_user) != 0:
             return redirect("/")
 
-        if User.objects.exists() == False:
-            level = "admin"
+        # if User.objects.exists() == False:
+        #     level = "admin"
 
-        if len(User.objects.filter(email=registerFormEmail)) == 0 and level != "admin":
-            level = "normal"
+        # if len(User.objects.filter(email=registerFormEmail)) == 0 and level != "admin":
+        #     level = "normal"
 
-        User.objects.create(firstName=registerFormFirstName, lastName=registerFormLastName, email=registerFormEmail, password=hashPassword, level=level)
+        User.objects.create(firstName=registerFormFirstName, lastName=registerFormLastName, email=registerFormEmail, password=hashPassword)
         request.session["firstName"] = registerFormFirstName
         request.session['userEmail'] = registerFormEmail
         return redirect("/dashboard")
@@ -99,7 +107,8 @@ def dashboard(request):
     this_user.skillSet = {
         "Languages": ["Python", "JavaScript", "C#", "Java", "PHP", "Ruby", "C/C++", "SQL", "Swift", "Go"],
         "Frameworks": ["Angular", "Django", "Vue", "React", ".NET"],
-        "Databases": ["MySQL", "MariaDB", "MongoDB", "PostgreSQL", "DynamoDB", "Amazon Aurora"]
+        "Databases": ["MySQL", "MariaDB", "MongoDB", "PostgreSQL", "DynamoDB", "Amazon Aurora"],
+        "Other":["other skills"]
     }
     this_user.headShot = "https://mdbootstrap.com/img/Photos/Others/men.jpg"
     this_user.profileHighlight = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet."

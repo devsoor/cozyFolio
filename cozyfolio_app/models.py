@@ -71,7 +71,11 @@ class User(models.Model):
     profileHighlight = models.TextField(null=True)
     resume = models.FileField(upload_to='uploads/', null=True)
     headshot = models.ImageField(upload_to='uploads/', null=True)
-    # skillSet = models.CharField(max_length=32, choices=SKILLS) choices is a list field of all skills, we really need a dictionary
+    # skillLanguages = models.TextField(null=True) #using json to 'cast' list into a string
+    # skillFrameWorks = models.TextField(null=True) #using json to 'cast' list into a string
+    # skillDatabases = models.TextField(null=True) #using json to 'cast' list into a string
+    # skillOther = models.TextField(null=True) #using json to 'cast' list into a string
+    # socialM = models.TextField(null=True) #using json to 'cast' list into a string
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
     objects = UserManager()
@@ -101,3 +105,19 @@ class Project(models.Model):
     updated_at = models.DateField(auto_now=True)
     portfolio = models.ManyToManyField(Portfolio, related_name = "project")
 
+class Skill(models.Model):
+    languages = models.TextField(null=True) #using json to 'cast' list into a string
+    frameWorks = models.TextField(null=True) #using json to 'cast' list into a string
+    databases = models.TextField(null=True) #using json to 'cast' list into a string
+    other = models.TextField(null=True) #using json to 'cast' list into a string
+    user = models.ForeignKey(User, related_name = "skill", on_delete = models.CASCADE, null = True)
+    created_at = models.DateField(default=datetime.now)
+    updated_at = models.DateField(auto_now=True)
+
+class SocialMedia(models.Model):
+    name = models.CharField(max_length = 100, null=True)
+    url = models.CharField(max_length = 255, null=True)
+    logo = models.ImageField(upload_to='uploads/', null=True)
+    created_at = models.DateField(default=datetime.now)
+    updated_at = models.DateField(auto_now=True)
+    user = models.ForeignKey(User, related_name = "socialMedia", on_delete = models.CASCADE, null = True)
