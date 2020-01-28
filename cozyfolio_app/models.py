@@ -134,7 +134,9 @@ class Skill(models.Model):
     databases = models.TextField(null=True) #using json to 'cast' list into a string
     other = models.TextField(null=True) #using json to 'cast' list into a string
     # clouds was added
-    user = models.ForeignKey(User, related_name = "skill", on_delete = models.CASCADE, null = True)
+    user = models.OneToOneField(User, on_delete = models.CASCADE, null = True)
+    portfolio = models.OneToOneField(Portfolio, on_delete = models.CASCADE, null = True)
+    project = models.OneToOneField(Project, on_delete = models.CASCADE, null = True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
 
