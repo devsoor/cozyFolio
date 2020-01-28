@@ -144,18 +144,19 @@
                 <!-- Skills -->
                 <div class="form-row mb-3">
                   <div class="col">
-                      <label for="languages">Languages</label>
-                      <select name="languages" class="custom-select form-control mb-4" multiple id="languages">
+                      <!-- <label for="languages">Languages</label> -->
+                      {{ form.as_table }}
+                      <!-- <select name="languages" class="custom-select form-control mb-4" multiple id="languages">
                         {% for lang in langList %}
-                        <option value="{{lang}}">{{lang}}</option>
+                            <option value="{{lang}}"">{{lang}}</option>
                         {% endfor %}
-                      </select>
+                      </select> -->
                     </div>
                     <div class="col">
                       <label for="frameworks">Frameworks</label>
                       <select name="frameworks" class="custom-select form-control mb-4" multiple id="frameworks">
                         {% for fw in frameworkList %}
-                        <option value="{{fw}}">{{fw}}</option>
+                            <option value="{{fw}}">{{fw}}</option>
                         {% endfor %}
                       </select>
                     </div>
@@ -163,7 +164,7 @@
                       <label for="databases">Databases</label>
                       <select name="databases" class="custom-select form-control mb-4" multiple id="databases">
                         {% for db in databaseList %}
-                        <option value="{{db}}">{{db}}</option>
+                            <option value="{{db}}">{{db}}</option>
                         {% endfor %}
                       </select>
                     </div>

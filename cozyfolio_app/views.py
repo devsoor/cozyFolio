@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import User, Portfolio, Project, Skill, SocialMedia
+from .forms import LanguagesForm
 from django.contrib import messages
 import bcrypt
 from datetime import date, datetime, timezone, timedelta
@@ -34,7 +35,16 @@ def registerUser(request):
         if len(this_user) != 0:
             return redirect("/")
 
-        User.objects.create(firstName=registerFormFirstName, lastName=registerFormLastName, email=registerFormEmail, password=hashPassword)
+        smLinkedIn = SocialMedia.objects.create(name="LinkedIn")
+        smGithub = SocialMedia.objects.create(name="GitHub")
+        smStackoverflow = SocialMedia.objects.create(name="Stack Overflow")
+
+        this_user = User.objects.create(firstName=registerFormFirstName, lastName=registerFormLastName, email=registerFormEmail, password=hashPassword)
+        smLinkedIn.user = this_user
+        smGithub.user = this_user
+        smStackoverflow.user = this_user
+        this_user.save()
+
         request.session["firstName"] = registerFormFirstName
         request.session['userEmail'] = registerFormEmail
         return redirect("/dashboard")
@@ -92,12 +102,12 @@ def dashboard(request):
     this_user.title = "Full Stack Developer"
     this_user.resume = "static/img/resume_sample.pdf"
     this_user.resume.name = f"{this_user.firstName}_{this_user.lastName}.pdf"
-    this_user.skillSet = {
-        "Languages": ["Python", "JavaScript", "C#", "Java", "PHP", "Ruby", "C/C++", "SQL", "Swift", "Go"],
-        "Frameworks": ["Angular", "Django", "Vue", "React", ".NET"],
-        "Databases": ["MySQL", "MariaDB", "MongoDB", "PostgreSQL", "DynamoDB", "Amazon Aurora"],
-        "Other":["other skills"]
-    }
+    # this_user.skillSet = {
+    #     "Languages": ["Python", "JavaScript", "C#", "Java", "PHP", "Ruby", "C/C++", "SQL", "Swift", "Go"],
+    #     "Frameworks": ["Angular", "Django", "Vue", "React", ".NET"],
+    #     "Databases": ["MySQL", "MariaDB", "MongoDB", "PostgreSQL", "DynamoDB", "Amazon Aurora"],
+    #     "Other":["other skills"]
+    # }
     this_user.headShot = "https://mdbootstrap.com/img/Photos/Others/men.jpg"
     this_user.profileHighlight = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet."
     # create a temp portfolio and list of projects
@@ -139,6 +149,18 @@ def dashboard(request):
 #
 # Portfolio functions
 #
+def portfolioCreate(request):
+    name  = request.POST['name']
+    title = request.POST['title']
+    portfolioSummary = request.POST['portfolioSummary']
+    resume = request.POST['resume']
+    Portfolio.objects.create(name = name, title = title, portfolioSummary = portfolioSummary, resume = resume)
+    return redirect('/dashboard')
+    
+def portfolioNew(request):
+    return render(request, "portfolio.html")
+
+
 def portfolioEdit(request, id):
     return render(request, "portfolio.html")
 
@@ -146,6 +168,9 @@ def portfolioEdit(request, id):
 #
 # Project functions
 #
+def projectNew(request):
+    return render(request, "project.html")
+
 def projectEdit(request, id):
     return render(request, "editProject.html")
 
@@ -154,19 +179,12 @@ def projectEdit(request, id):
 #
 def userProfile(request):
     #create arr of lang list create arr of social media, two methods initializing the two models
-    langList =["Python","JavaScript", "HTML/CSS","Java", "C/C++","Swift","TypeScript","Go","SQL","Ruby","R",
-    "PHP","Perl","Kotlin","C#","Rust","Scheme","Erlang","Scala","Elixir","Haskell","Basic"]
-    frameworkList = ["Ruby on Rails", 'Django', "Laravel", 'Symfony', 'Meteor', "Angular", "Yii", "Play", "React", "Flask", "Phoenix", 
-    "Spring", "CakePHP", "Vue", "TensorFlow", "PyTorch","Sonnet","Keras","MXNet", "Gluon","Chainer","DL4J","ONNX"]
-    databaseList = ["MySQL", "Microsoft SQL Server", "PostgreSQL", "IBM Db2 Family", "Microsoft Access", "MariaDB", 
-    "SQLite", "IBM Informix", "MongoDB", "Redis"]
 
+    form = LanguagesForm
     this_user = User.objects.get(email=request.session['userEmail'])
     context = {
-        "langList": langList,
-        "frameworkList": frameworkList,
-        "databaseList": databaseList,
         "this_user": this_user,
+        "form": form,
     }
     return render(request, "userProfile.html", context)
 
@@ -197,7 +215,7 @@ def userCreate(request):
         profileFormLinkedIn = request.POST["profileFormLinkedIn"]
         profileFormGithub = request.POST["profileFormGithub"]
         profileFormStackoverflow = request.POST["profileFormStackoverflow"]
-        languages = request.POST.getlist("languages", None)
+        # languages = request.POST.getlist("languages", None)
         frameworks = request.POST.getlist("frameworks")
         databases = request.POST.getlist("databases")
         profileHighlight = request.POST["profileHighlight"]
@@ -214,16 +232,25 @@ def userCreate(request):
         this_user.resume = profileFormResume
         this_user.headshot = profileFormHeadshot
 
-        smLinkedIn = SocialMedia.objects.create(name="LinkedIn", url=profileFormLinkedIn, logo="/static/img/linkedin.png")
-        smGithub = SocialMedia.objects.create(name="GitHub", url=profileFormGithub, logo="/static/img/github.png")
-        smStackoverflow = SocialMedia.objects.create(name="StackOverflow", url=profileFormStackoverflow, logo="/static/img/stackoverflow.png")
-        smLinkedIn.user = this_user
-        smGithub.user = this_user
-        smStackoverflow.user = this_user
+        form = LanguagesForm(request.POST)
+        print("=====================> FORM", form)
+        pprint.pprint(form)
+        if form.is_valid():
+            languages = form.cleaned_data.get('languages')
+            print("=====================> languages", languages)
+        else:
+            languages = []
+
+        print("=======AFTRER=======> languages", languages)
 
         this_user.skill.languages = languages
         this_user.skill.databases = databases
         this_user.skill.frameworks = frameworks
+
+        # get social media
+        smLinkedIn = SocialMedia.objects.filter(name="LinkedIn", user=this_user)
+        smGithub = SocialMedia.objects.filter(name="GitHub", user=this_user)
+        smStackoverflow = SocialMedia.objects.filter(name="Stack Overflow", user=this_user)
         
         this_user.save()
         request.session["firstName"] = profileFormFirstName
