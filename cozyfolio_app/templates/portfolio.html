@@ -1,5 +1,8 @@
+{% extends "dashboard.html" %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,227 +23,63 @@
   <link href="/static/css/style.min.css" rel="stylesheet">
 
 </head>
+
 <body class="grey lighten-3">
-
-  <!--Main Navigation-->
-  <header id="header">
-    {% block header %}
-    <!--Navbar -->
-    <nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color">
-      <a class="navbar-brand logo-wrapper waves-effect" href="#">
-        <img src="static/img/cozyfolio_logo.png" class="img-fluid" alt="">
-      </a>
-      <!-- <a class="navbar-brand" href="#">Welcome, {{this_user.firstName}} from {{this_user.city}}</a> -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
-        aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Portolio
-            </a>
-            <div class="dropdown-menu dropdown-mfenu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <!-- <a class="dropdown-item" href="/portfolioNew">New..</a>
-              <a class="dropdown-item" href="/portfolioEdit/{{portfolio.id}}">Edit..</a>
-              <a class="dropdown-item" href="/portfolioEdit/{{portfolio.id}}">Save</a> -->
-              <a class="dropdown-item" href="#"">New..</a>
-              <a class="dropdown-item" href="#">Edit..</a>
-              <a class="dropdown-item" href="#">Save</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Project
-            </a>
-            <div class="dropdown-menu dropdown-mfenu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <!-- <a class="dropdown-item" href="/projectNew">New..</a>
-              <a class="dropdown-item" href="/projectEdit/{{project.id}}">Edit..</a>
-              <a class="dropdown-item" href="/projectSave/{{project.id}}">Save</a> -->
-              <a class="dropdown-item" href="#">New..</a>
-              <a class="dropdown-item" href="#">Edit..</a>
-              <a class="dropdown-item" href="#">Save</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Website
-            </a>
-            <div class="dropdown-menu dropdown-mfenu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <a class="dropdown-item" href="#">Preview</a>
-              <a class="dropdown-item" href="#">Create</a>
-            </div>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto nav-flex-icons">
-          <li class="nav-item">
-            <a href="https://www.linkedin.com" class="nav-link waves-effect" target="_blank">
-              <i class="fab fa-linkedin"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="https://twitter.com" class="nav-link waves-effect" target="_blank">
-              <i class="fab fa-kaggle"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="https://github.com" class="nav-link  waves-effect"
-              target="_blank">
-              <i class="fab fa-github mr-2"></i>
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user"></i> Profile </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <a class="dropdown-item" href="#">My account</a>
-              <a class="dropdown-item" href="#">Log out</a>
-            </div>
-          </li>
-        </ul>
-
-      </div>
-    </nav>
-    <!--/.Navbar -->
-  </header>
-
-    <!-- Sidebar -->
-    <div id="sidebar" class="sidebar-fixed position-fixed">
-      {% block sidebar %}
-      <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item active waves-effect">
-          <i class="fas fa-chart-pie mr-3"></i>Manage
-        </a>
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-user mr-3"></i>Portfolios</a>
-            {% for folio in portfolios %}
-              <a href="/dashboard" class="nav-link waves-effect" target="_blank">{{folio}}</a>
-            {% endfor %}
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-table mr-3"></i>Projects</a>
-          {% for proj in projects %}
-            <a href="/dashboard" class="nav-link waves-effect" target="_blank">{{proj.name}}</a>
-          {% endfor %}
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-cog mr-3"></i>Settings</a>
-      </div>
-      {% endblock %}
-    </div>
-    <!-- Sidebar -->
-    {% endblock %}
-  <!-- </header> -->
-  <!--Main Navigation-->
-
-  <!--Main layout-->
-  <main id="content" class="pt-3 mx-lg-5">
-    {% block content %}
-    <div class="container-fluid mt-5">
+  {% block content %}
+  <div class="container-fluid">
     <div class="row wow fadeIn">
       <div class="col-lg-8 col-md-12">
         <div class="card card-cascade wider mb-4 wow fadeIn">
-              <div class="card-body card-body-cascade text-left">
-                <div class="form-group">
-                  <label for="portfolioSummary">My Skills Summary</label>
-                  <textarea class="form-control rounded-0" id="portfolioSummary" rows="5">
-                    {{this_user.profileHighlight}}
-                  </textarea>
-                </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-primary mx-auto ">Save</button>
-                </div>
-                <hr>
-                <div class="row">
-                  {% for skill, skill_list in this_user.skillSet.items %}
-                      <div class="col-lg-4 col-md-12">
-                              <h4>{{skill}}</h4>
-                              {% for lang in skill_list %}
-                                  <li>{{lang}}</li>
-                              {% endfor %}
-                      </div>
-                  {% endfor %}
-                </div>
+          <div class="card-body card-body-cascade text-left">
+            <form action="userCreate" method="post" class="p-5">
+              {% csrf_token %}
+              <p class="h4 mb-4">Portfolio</p>
+              <label for="portfolioFormName">Portfolio Name</label>
+              <input type="text" id="portfolioFormName" name="portfolioFormName" class="form-control mb-4">
+              <label for="portfolioFormJobTitle">Job title applying for</label>
+              <input type="text" id="portfolioFormJobTitle" name="portfolioFormJobTitle" class="form-control mb-4">
+
+              <div class="form-row mb-4">
+                <label for="portfolioFormSummary">Portfolio Summary</label>
+                <textarea class="form-control rounded-0" id="portfolioFormSummary" name="portfolioFormSummary"
+                  rows="8"></textarea>
               </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-12 text-center">
-            <div class="avatar mx-auto white"><img src="{{this_user.headShot}}"
-              alt="avatar mx-auto white" class="rounded-circle img-fluid">
-              <h4 class="card-title"><strong>{{this_user.firstName}} {{this_user.lastName}}</strong></h4>
-              <a class="btn btn-primary" href="" download="{{this_user.resume}}"><i class="fa fa-download"></i>
-                Download Resume
-             </a>
-          </div>
 
-      </div>
-    </div>
-
-    <div class="row wow fadeIn">
-      {% for proj in projects %}
-          <div class="col-lg-4 col-md-12">
-            <div class="card card-cascade wider mb-4 wow fadeIn">
-              <!--Card image-->
-              <div class="view view-cascade overlay">
-                <img src="{{proj.image}}" class="card-img-top"
-                  alt="wider">
-
-              </div>
-              <!--/Card image-->
-
-              <!--Card content-->
-              <div class="card-body card-body-cascade text-center">
-                    <!--Title-->
-                    <h5 class="indigo-text"><strong>{{proj.name}}</strong></h5>
-            
-                    <p class="card-text">{{proj.description}} </p>
-                    <form action="/projectEdit/{{proj.id}}" method="post">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
-                    </form>
-              </div> 
-            </div> 
-          </div>
-        {% endfor %}  
-      </div>
-
-      <div class="row row d-flex justify-content-center">
-        <div class="col-md-6">
-            <div class="card card-cascade wider mb-4 wow fadeIn">
-                  <div class="card-body card-body-cascade text-center">
-                        <h4>Contact info:</h4>
-                        <p>Email: {{this_user.email}}</p>
-                        <div class="row">
-                          <div class="card-body card-body-cascade text-center">
-                            <!--Email-->
-                            <a class="btn-floating btn-lg btn-email" type="button" role="button"><i class="fas fa-envelope"></i></a>
-                            <a class="btn-floating btn-lg btn-li" type="button" role="button"><i class="fab fa-linkedin-in"></i></a>
-                            <!--Stack Overflow-->
-                            <a class="btn-floating btn-lg btn-so" type="button" role="button"><i class="fab fa-stack-overflow"></i></a>
-                            <!--Youtube-->
-                            <a class="btn-floating btn-lg btn-yt" type="button" role="button"><i class="fab fa-youtube"></i></a>
-                            <!--Github-->
-                            <a class="btn-floating btn-lg btn-git" type="button" role="button"><i class="fab fa-github"></i></a>
-                          </div>
-                        </div>
+              <!-- Resume upload -->
+              <div class="form-row mb-4">
+                <div class="col-md-2">
+                  <label for="profileFormResume0">Resume</label>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="profileFormResume0">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="profileFormResume" name="profileFormResume"
+                        aria-describedby="profileFormResume0">
+                      <label class="custom-file-label" for="profileFormResume">Choose file</label>
+                    </div>
                   </div>
-            </div>
+                </div>
+              </div>
+              <div class="row justify-content-end">
+                <button class="btn btn-info" type="cancel">Cancel</button>
+                <button class="btn btn-info" type="submit">Save</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-    {% endblock %}
-  </main>
+  </div>
+  {% endblock %}
 
   {% if messages %}
-  <ul class="messages">    
-      {% for message in messages %}    
-          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
-      {% endfor %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
   </ul>
   {% endif %}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -250,4 +89,5 @@
   <script type="text/javascript" src="static/js/mdb.min.js"></script>
   <script type="text/javascript"></script>
 </body>
+
 </html>
