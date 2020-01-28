@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,6 +21,7 @@
   <link href="/static/css/style.min.css" rel="stylesheet">
 
 </head>
+
 <body class="grey lighten-3">
 
   <!--Main Navigation-->
@@ -88,8 +90,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="https://github.com" class="nav-link  waves-effect"
-              target="_blank">
+            <a href="https://github.com" class="nav-link  waves-effect" target="_blank">
               <i class="fab fa-github mr-2"></i>
             </a>
           </li>
@@ -109,121 +110,124 @@
     {% endblock %}
   </header>
 
-    <!-- Sidebar -->
-    <div id="sidebar" class="sidebar-fixed position-fixed">
-      {% block sidebar %}
-      <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item active waves-effect">
-          <i class="fas fa-chart-pie mr-3"></i>Manage
-        </a>
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-user mr-3"></i>Portfolios</a>
-            {% for folio in portfolios %}
-              <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect" target="_blank">{{folio.name}}</a>
-            {% endfor %}
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-table mr-3"></i>Projects</a>
-          {% for proj in projects %}
-            <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect" target="_blank">{{proj.name}}</a>
-          {% endfor %}
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
-        <a href="#" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-cog mr-3"></i>Settings</a>
-      </div>
-      {% endblock %}
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar-fixed position-fixed">
+    {% block sidebar %}
+    <div class="list-group list-group-flush">
+      <a href="#" class="list-group-item active waves-effect">
+        <i class="fas fa-chart-pie mr-3"></i>Manage
+      </a>
+      <a href="#" class="list-group-item list-group-item-action waves-effect">
+        <i class="fas fa-user mr-3"></i>Portfolios</a>
+      {% for folio in portfolios %}
+      <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect" target="_blank">{{folio.name}}</a>
+      {% endfor %}
+      <a href="#" class="list-group-item list-group-item-action waves-effect">
+        <i class="fas fa-table mr-3"></i>Projects</a>
+      {% for proj in projects %}
+      <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect" target="_blank">{{proj.name}}</a>
+      {% endfor %}
+      <a href="#" class="list-group-item list-group-item-action waves-effect">
+        <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
+      <a href="#" class="list-group-item list-group-item-action waves-effect">
+        <i class="fas fa-cog mr-3"></i>Settings</a>
     </div>
-    <!-- Sidebar -->
+    {% endblock %}
+  </div>
+  <!-- Sidebar -->
 
   <!--Main layout-->
   <main id="content" class="pt-3 mx-lg-5">
     {% block content %}
     <div class="container-fluid mt-5">
-        <div class="row wow fadeIn">
-          
-          <div class="col-lg-8 col-md-12">
-            <div class="card card-cascade wider mb-4 wow fadeIn">
-                  <div class="card-body card-body-cascade text-left">
-                    <div class="form-group">
-                      <label for="portfolioSummary">My Skills Summary</label>
-                      <textarea class="form-control rounded-0" id="portfolioSummary" rows="5">
+      <div class="row wow fadeIn">
+
+        <div class="col-lg-8 col-md-12">
+          <div class="card card-cascade wider mb-4 wow fadeIn">
+            <div class="card-body card-body-cascade text-left">
+              <div class="form-group">
+                <label for="portfolioSummary">My Skills Summary</label>
+                <textarea class="form-control rounded-0" id="portfolioSummary" rows="5">
                         {{this_user.profileHighlight}}
                       </textarea>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      {% for skill, skill_list in this_user.skillSet.items %}
-                          <div class="col-lg-4 col-md-12">
-                                  <h5>{{skill}}</h5>
-                                  <textarea class="form-control rounded-0" id="skillsId" rows="8">
+              </div>
+              <hr>
+              <div class="row">
+                {% for skill, skill_list in this_user.skillSet.items %}
+                <div class="col-lg-4 col-md-12">
+                  <h5>{{skill}}</h5>
+                  <textarea class="form-control rounded-0" id="skillsId" rows="8">
                                     {% for lang in skill_list %}
                                         {{lang}}
                                     {% endfor %}
                                   </textarea>
-                          </div>
-                      {% endfor %}
-                    </div>
-                  </div>
-            </div>
-          </div>
-
-
-          <div class="col-lg-4 col-md-12 text-center">
-                <div class="avatar mx-auto white"><img src="{{this_user.headShot}}"
-                  alt="avatar mx-auto white" class="rounded-circle img-fluid">
-                  <h4 class="card-title"><strong>{{this_user.firstName}} {{this_user.lastName}}</strong></h4>
-                  <a class="btn btn-primary" href="" download="{{this_user.resume}}"><i class="fa fa-download"></i>
-                    {{this_user.resume}}
-                </a>
+                </div>
+                {% endfor %}
               </div>
-
+            </div>
           </div>
         </div>
 
 
-    <table class="table table-striped table-bordered ">
-      <thead class="black white-text">
-        <tr>
-          <th scope="col">Project</th>
-          <th scope="col">Technologies</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for proj in projects %}
+        <div class="col-lg-4 col-md-12 text-center">
+          <div class="avatar mx-auto white"><img src="{{this_user.headShot}}" alt="avatar mx-auto white"
+              class="rounded-circle img-fluid">
+            <h4 class="card-title"><strong>{{this_user.firstName}} {{this_user.lastName}}</strong></h4>
+            <a class="btn btn-primary" href="" download="{{this_user.resume}}"><i class="fa fa-download"></i>
+              {{this_user.resume}}
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+
+      <table class="table table-striped table-bordered ">
+        <thead class="black white-text">
+          <tr>
+            <th scope="col">Project</th>
+            <th scope="col">Technologies</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for proj in projects %}
           <tr>
             <td>{{proj.name}}</td>
-           
-              <td>
-                {% for tech in proj.technologies %}
-                {{tech}}
-                {% endfor %}
-              </td>
+
+            <td>
+              {% for tech in proj.technologies %}
+              {{tech}}
+              {% endfor %}
+            </td>
           </tr>
-        {% endfor %} 
-      </tbody>
-    </table>
+          {% endfor %}
+        </tbody>
+      </table>
 
       <div class="row row d-flex justify-content-center">
         <div class="col-md-6">
-            <div class="card card-cascade wider mb-4 wow fadeIn">
-                  <div class="card-body card-body-cascade text-center">
-                        <h4>Contact info:</h4>
-                        <p>Email: {{this_user.email}}</p>
-                        <div class="row">
-                          <div class="card-body card-body-cascade text-center">
-                            <!--Email-->
-                            <a class="btn-floating btn-lg btn-email" type="button" role="button"><i class="fas fa-envelope"></i></a>
-                            <a class="btn-floating btn-lg btn-li" type="button" role="button"><i class="fab fa-linkedin-in"></i></a>
-                            <!--Stack Overflow-->
-                            <a class="btn-floating btn-lg btn-so" type="button" role="button"><i class="fab fa-stack-overflow"></i></a>
-                            <!--Youtube-->
-                            <a class="btn-floating btn-lg btn-yt" type="button" role="button"><i class="fab fa-youtube"></i></a>
-                            <!--Github-->
-                            <a class="btn-floating btn-lg btn-git" type="button" role="button"><i class="fab fa-github"></i></a>
-                          </div>
-                        </div>
-                  </div>
+          <div class="card card-cascade wider mb-4 wow fadeIn">
+            <div class="card-body card-body-cascade text-center">
+              <h4>Contact info:</h4>
+              <p>Email: {{this_user.email}}</p>
+              <div class="row">
+                <div class="card-body card-body-cascade text-center">
+                  <!--Email-->
+                  <a class="btn-floating btn-lg btn-email" type="button" role="button"><i
+                      class="fas fa-envelope"></i></a>
+                  <a class="btn-floating btn-lg btn-li" type="button" role="button"><i
+                      class="fab fa-linkedin-in"></i></a>
+                  <!--Stack Overflow-->
+                  <a class="btn-floating btn-lg btn-so" type="button" role="button"><i
+                      class="fab fa-stack-overflow"></i></a>
+                  <!--Youtube-->
+                  <a class="btn-floating btn-lg btn-yt" type="button" role="button"><i class="fab fa-youtube"></i></a>
+                  <!--Github-->
+                  <a class="btn-floating btn-lg btn-git" type="button" role="button"><i class="fab fa-github"></i></a>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
       </div>
     </div>
@@ -231,10 +235,10 @@
   </main>
 
   {% if messages %}
-  <ul class="messages">    
-      {% for message in messages %}    
-          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
-      {% endfor %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
   </ul>
   {% endif %}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -244,4 +248,5 @@
   <script type="text/javascript" src="static/js/mdb.min.js"></script>
   <script type="text/javascript"></script>
 </body>
+
 </html>

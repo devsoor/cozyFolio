@@ -133,6 +133,7 @@ class Skill(models.Model):
     frameworks = models.TextField(null=True) #using json to 'cast' list into a string
     databases = models.TextField(null=True) #using json to 'cast' list into a string
     other = models.TextField(null=True) #using json to 'cast' list into a string
+    # clouds was added
     user = models.ForeignKey(User, related_name = "skill", on_delete = models.CASCADE, null = True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)

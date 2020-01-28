@@ -112,7 +112,8 @@ def dashboard(request):
     this_user.profileHighlight = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet."
     # create a temp portfolio and list of projects
 
-    portfolios = ["Full-Stack Developer", "Front-end Developer", "Product Manager"]
+    user = User.objects.get(email = request.session['userEmail'])
+    userPortfolios = user.portfolio.all()
     projects = [
         {
             "id": 1,
@@ -140,7 +141,7 @@ def dashboard(request):
     socialMedia = {"linkedin": "https://www.linkedin.com/in/devsoor/", "gitHub":"https://github.com/devsoor/PythonStack"}
     context = {
         "this_user": this_user,
-        "portfolios": portfolios,
+        "portfolios": userPortfolios,
         "projects": projects,
         "socialMedia": socialMedia,
     }
@@ -150,11 +151,14 @@ def dashboard(request):
 # Portfolio functions
 #
 def portfolioCreate(request):
-    name  = request.POST['name']
-    title = request.POST['title']
-    portfolioSummary = request.POST['portfolioSummary']
-    resume = request.POST['resume']
-    Portfolio.objects.create(name = name, title = title, portfolioSummary = portfolioSummary, resume = resume)
+    print("portfolioCreate")
+    pprint.pprint(request.POST)
+    newName  = request.POST['portfolioFormName']
+    newTitle = request.POST['portfolioFormJobTitle']
+    newSummary = request.POST['portfolioFormSummary']
+    newResume = request.POST['portfolioFormResume']
+    newUser = User.objects.get(email = request.session['userEmail'])
+    Portfolio.objects.create(name = newName, title = newTitle, portfolioSummary = newSummary, resume = newResume,user = newUser)
     return redirect('/dashboard')
     
 def portfolioNew(request):

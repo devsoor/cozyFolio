@@ -31,7 +31,7 @@
       <div class="col-lg-8 col-md-12">
         <div class="card card-cascade wider mb-4 wow fadeIn">
           <div class="card-body card-body-cascade text-left">
-            <form action="userCreate" method="post" class="p-5">
+            <form action="portfolioCreate" method="post" class="p-5">
               {% csrf_token %}
               <p class="h4 mb-4">Portfolio</p>
               <label for="portfolioFormName">Portfolio Name</label>
@@ -48,17 +48,17 @@
               <!-- Resume upload -->
               <div class="form-row mb-4">
                 <div class="col-md-2">
-                  <label for="profileFormResume0">Resume</label>
+                  <label for="portfolioFormResume">Resume</label>
                 </div>
                 <div class="col-md-6">
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="profileFormResume0">Upload</span>
+                      <span class="input-group-text" id="portfolioFormResume">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="profileFormResume" name="profileFormResume"
-                        aria-describedby="profileFormResume0">
-                      <label class="custom-file-label" for="profileFormResume">Choose file</label>
+                      <input type="file" class="custom-file-input" id="portfolioFormResume" name="portfolioFormResume"
+                        aria-describedby="portfolioFormResume">
+                      <label class="custom-file-label" for="portfolioFormResume">Choose file</label>
                     </div>
                   </div>
                 </div>
