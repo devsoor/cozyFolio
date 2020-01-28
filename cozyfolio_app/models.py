@@ -132,6 +132,7 @@ class Skill(models.Model):
     languages = models.TextField(null=True) #using json to 'cast' list into a string
     frameworks = models.TextField(null=True) #using json to 'cast' list into a string
     databases = models.TextField(null=True) #using json to 'cast' list into a string
+    clouds = models.TextField(null=True) #using json to 'cast' list into a string
     other = models.TextField(null=True) #using json to 'cast' list into a string
     # clouds was added
     user = models.OneToOneField(User, on_delete = models.CASCADE, null = True)
