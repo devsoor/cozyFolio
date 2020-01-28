@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import User
+from .models import User, Portfolio, Project, Skill, SocialMedia
 from django.contrib import messages
 import bcrypt
 from datetime import date, datetime, timezone, timedelta
@@ -7,14 +7,8 @@ import pytz
 import pprint
 from django.db.models import Q
 
-#create arr of lang list create arr of social media, two methods initializing the two models
-langList =["Python","JavaScript", "HTML/CSS","Java", "C/C++","Swift","TypeScript","Go","SQL","Ruby","R",
-"PHP","Perl","Kotlin","C#","Rust","Scheme","Erlang","Scala","Elixir","Haskell","Basic"]
-frameworkList = ["Ruby on Rails", 'Django', "Laravel", 'Symfony', 'Meteor', "Angular", "Yii", "Play", "React", "Flask", "Phoenix", 
-"Spring", "CakePHP", "Vue", "TensorFlow", "PyTorch","Sonnet","Keras","MXNet", "Gluon","Chainer","DL4J","ONNX"]
-databaseList = ["MySQL", "Microsoft SQL Server", "PostgreSQL", "IBM Db2 Family", "Microsoft Access", "MariaDB", 
-"SQLite", "IBM Informix", "MongoDB", "Redis"]
-        # Skill.objects.create(languages = langList, frameworks = frameworkList, databases = databaseList, other = otherList)
+
+# Skill.objects.create(languages = langList, frameworks = frameworkList, databases = databaseList, other = otherList)
 
 
 def index(request):
@@ -39,12 +33,6 @@ def registerUser(request):
         this_user = User.objects.filter(email=registerFormEmail)
         if len(this_user) != 0:
             return redirect("/")
-
-        # if User.objects.exists() == False:
-        #     level = "admin"
-
-        # if len(User.objects.filter(email=registerFormEmail)) == 0 and level != "admin":
-        #     level = "normal"
 
         User.objects.create(firstName=registerFormFirstName, lastName=registerFormLastName, email=registerFormEmail, password=hashPassword)
         request.session["firstName"] = registerFormFirstName
@@ -148,5 +136,97 @@ def dashboard(request):
     }
     return render(request, "dashboard.html", context)
 
-def editProject(request, id):
+#
+# Portfolio functions
+#
+def portfolioEdit(request, id):
+    return render(request, "portfolio.html")
+
+
+#
+# Project functions
+#
+def projectEdit(request, id):
     return render(request, "editProject.html")
+
+#
+# User functions
+#
+def userProfile(request):
+    #create arr of lang list create arr of social media, two methods initializing the two models
+    langList =["Python","JavaScript", "HTML/CSS","Java", "C/C++","Swift","TypeScript","Go","SQL","Ruby","R",
+    "PHP","Perl","Kotlin","C#","Rust","Scheme","Erlang","Scala","Elixir","Haskell","Basic"]
+    frameworkList = ["Ruby on Rails", 'Django', "Laravel", 'Symfony', 'Meteor', "Angular", "Yii", "Play", "React", "Flask", "Phoenix", 
+    "Spring", "CakePHP", "Vue", "TensorFlow", "PyTorch","Sonnet","Keras","MXNet", "Gluon","Chainer","DL4J","ONNX"]
+    databaseList = ["MySQL", "Microsoft SQL Server", "PostgreSQL", "IBM Db2 Family", "Microsoft Access", "MariaDB", 
+    "SQLite", "IBM Informix", "MongoDB", "Redis"]
+
+    this_user = User.objects.get(email=request.session['userEmail'])
+    context = {
+        "langList": langList,
+        "frameworkList": frameworkList,
+        "databaseList": databaseList,
+        "this_user": this_user,
+    }
+    return render(request, "userProfile.html", context)
+
+
+def userCreate(request):
+    pprint.pprint(request.POST)
+    print("request.method = ", request.method)
+    errors = User.objects.userProfile_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+
+        # redirect to stay on same page
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        this_user = User.objects.get(email=request.session['userEmail'])
+
+        profileFormFirstName = request.POST["profileFormFirstName"]
+        profileFormLastName = request.POST["profileFormLastName"]
+        profileFormEmail = request.POST["profileFormEmail"]
+        profileFormTitle = request.POST["profileFormTitle"]
+        profileFormAddress = request.POST["profileFormAddress"]
+        country = request.POST["country"]
+        state = request.POST["state"]
+        city = request.POST["city"]
+        profileFormResume = request.POST["profileFormResume"]
+        profileFormHeadshot = request.POST["profileFormHeadshot"]
+        profileFormLinkedIn = request.POST["profileFormLinkedIn"]
+        profileFormGithub = request.POST["profileFormGithub"]
+        profileFormStackoverflow = request.POST["profileFormStackoverflow"]
+        languages = request.POST.getlist("languages", None)
+        frameworks = request.POST.getlist("frameworks")
+        databases = request.POST.getlist("databases")
+        profileHighlight = request.POST["profileHighlight"]
+
+        this_user.firstName = profileFormFirstName
+        this_user.lastName = profileFormLastName
+        this_user.email = profileFormEmail
+        this_user.title = profileFormTitle
+        this_user.address = profileFormAddress
+        this_user.country = country
+        this_user.state = state
+        this_user.city = city
+        this_user.profileHighlight = profileHighlight
+        this_user.resume = profileFormResume
+        this_user.headshot = profileFormHeadshot
+
+        smLinkedIn = SocialMedia.objects.create(name="LinkedIn", url=profileFormLinkedIn, logo="/static/img/linkedin.png")
+        smGithub = SocialMedia.objects.create(name="GitHub", url=profileFormGithub, logo="/static/img/github.png")
+        smStackoverflow = SocialMedia.objects.create(name="StackOverflow", url=profileFormStackoverflow, logo="/static/img/stackoverflow.png")
+        smLinkedIn.user = this_user
+        smGithub.user = this_user
+        smStackoverflow.user = this_user
+
+        this_user.skill.languages = languages
+        this_user.skill.databases = databases
+        this_user.skill.frameworks = frameworks
+        
+        this_user.save()
+        request.session["firstName"] = profileFormFirstName
+        request.session['userEmail'] = profileFormEmail
+
+        return redirect("/dashboard")

@@ -58,15 +58,38 @@ class UserManager(models.Manager):
 
         return errors
 
+    def userProfile_validator(self, postData):
+        if not postData:
+            return
+        errors = {}
+        NAME_REGEX = re.compile ('[a-zA-Z_]')
+
+        if NAME_REGEX.match(postData['profileFormFirstName']) == None or len(postData['profileFormFirstName']) < 2:
+            errors["profileFormFirstName"] = "First name must be all letters and length atleast 2 characters long"
+
+        if NAME_REGEX.match(postData['profileFormLastName']) == None or len(postData['profileFormLastName']) < 2:
+            errors["profileFormLastName"] = "Last name must be all letters and length atleast 2 characters long"
+
+        EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+        if not EMAIL_REGEX.match(postData['profileFormEmail']) or len(postData['profileFormEmail']) == 0:           
+            errors['profileFormEmail'] = "Invalid email address!"
+
+        if len(postData['profileFormEmail']) < 8:
+            errors['profileFormEmail'] = "Password must be atleast 8 characters long"
+
+        return errors
+
 class User(models.Model):
     firstName = models.CharField(max_length=75)
     lastName = models.CharField(max_length=75)
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=255)
     # password = models.EMailField()
-    level = models.CharField(max_length=50, default="normal")
-    city = models.CharField(max_length=100, null=True)
+    address = models.CharField(max_length=100, null=True)
+    country = models.CharField(max_length=100, null=True)
     state = models.CharField(max_length=10, null=True)
+    city = models.CharField(max_length=100, null=True)
+    zipCode = models.CharField(max_length=10, null=True)
     title = models.CharField(max_length=100, null=True)
     profileHighlight = models.TextField(null=True)
     resume = models.FileField(upload_to='uploads/', null=True)
@@ -107,7 +130,7 @@ class Project(models.Model):
 
 class Skill(models.Model):
     languages = models.TextField(null=True) #using json to 'cast' list into a string
-    frameWorks = models.TextField(null=True) #using json to 'cast' list into a string
+    frameworks = models.TextField(null=True) #using json to 'cast' list into a string
     databases = models.TextField(null=True) #using json to 'cast' list into a string
     other = models.TextField(null=True) #using json to 'cast' list into a string
     user = models.ForeignKey(User, related_name = "skill", on_delete = models.CASCADE, null = True)
