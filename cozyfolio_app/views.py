@@ -143,7 +143,7 @@ def dashboard(request):
     return render(request, "dashboard.html", context)
 
 #
-# Portfolio functions
+# Portfolio functions==========================================================================================
 #
 def portfolioCreate(request):
     print("portfolioCreate")
@@ -181,7 +181,7 @@ def portfolioUpdate(request,id):
     return redirect('/dashboard')
 
 #
-# Project functions
+# Project functions=============================================================================================
 #
 def projectCreate(request):
     pprint.pprint(request.POST)
@@ -198,8 +198,29 @@ def projectCreate(request):
 def projectNew(request):
     return render(request, "project.html")
 
+def projectUpdate(request,id):
+    updatedName  = request.POST['projectFormName']
+    updatedSummary = request.POST['projectFormSummary']
+    updatedTech = request.POST['projectFormTech']
+    updatedTeam = request.POST['projectFormTeam'] 
+    updatedProcess = request.POST['projectFormProcess']
+    updatedURL = request.POST['projectFormURL']
+    projectToBeUpdated = Project.objects.get(id = id)
+    projectToBeUpdated.name = updatedName
+    projectToBeUpdated.summary = updatedSummary
+    projectToBeUpdated.techUsed = updatedTech
+    projectToBeUpdated.team = updatedTeam
+    projectToBeUpdated.process = updatedProcess
+    projectToBeUpdated.url = updatedURL
+    projectToBeUpdated.save()
+    return redirect('/dashboard')
+
 def projectEdit(request, id):
-    return render(request, "editProject.html")
+    projectToEdit = Project.objects.get(id = id);
+    context = {
+        'project' : projectToEdit
+    }
+    return render(request, "projectEdit.html",context)
 
 #
 # User functions
