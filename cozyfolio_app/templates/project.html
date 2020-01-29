@@ -1,6 +1,7 @@
-{% include 'dashboard.html' %}
+{% extends 'dashboard.html' %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,19 +16,61 @@
   <link href="static/css/style.min.css" rel="stylesheet"> -->
 
 </head>
+
 <body class="grey lighten-3">
 
   {% block content %}
-  EDIT PROJECT
+  <div class="container-fluid">
+    <div class="row wow fadeIn">
+      <div class="col-lg-8 col-md-12">
+        <div class="card card-cascade wider mb-4 wow fadeIn">
+          <div class="card-body card-body-cascade text-left">
+            <form action="projectCreate" method="post" class="p-5">
+              {% csrf_token %}
+              <p class="h4 mb-4">Project</p>
+              <label for="projectFormName">Project Name</label>
+              <input type="text" id="projectFormName" name="projectFormName" class="form-control mb-4">
+              <div class="form-row mb-4">
+                <label for="projectFormSummary">Project Summary</label>
+                <textarea class="form-control rounded-0" id="projectFormSummary" name="projectFormSummary"
+                  rows="3"></textarea>
+              </div>
+              <div class="form-row mb-4">
+                <label for="projectFormTech">Tech Used</label>
+                <textarea class="form-control rounded-0" id="projectFormTech" name="projectFormTech"
+                  rows="2"></textarea>
+              </div>
+              <div class="form-row mb-4">
+                <label for="projectFormTeam">Team</label>
+                <textarea class="form-control rounded-0" id="projectFormTeam" name="projectFormTeam"
+                  rows="1"></textarea>
+              </div>
+              <div class="form-row mb-4">
+                <label for="projectFormProcess">Process</label>
+                <textarea class="form-control rounded-0" id="projectFormProcess" name="projectFormProcess"
+                  rows="3"></textarea>
+              </div>
+              <label for="projectFormURL">URL for Project</label>
+              <input type="text" id="projectFormURL" name="projectFormURL" class="form-control mb-4">
+              <div class="row justify-content-end">
+                <button class="btn btn-info" type="cancel">Cancel</button>
+                <button class="btn btn-info" type="submit">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   {% endblock %}
 
-  {% if messages %}
-  <ul class="messages">    
-      {% for message in messages %}    
-          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
-      {% endfor %}
+  <!-- {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
   </ul>
-  {% endif %}
+  {% endif %} -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <!-- <script type="text/javascript" src="static/js/jquery.min.js"></script> -->
   <script type="text/javascript" src="static/js/popper.min.js"></script>
@@ -35,4 +78,5 @@
   <script type="text/javascript" src="static/js/mdb.min.js"></script>
   <script type="text/javascript"></script>
 </body>
+
 </html>

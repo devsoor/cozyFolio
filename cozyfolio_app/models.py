@@ -121,12 +121,15 @@ class Project(models.Model):
     techUsed = models.TextField(null=True)
     team = models.TextField(null=True)
     process = models.TextField(null=True)
+    url = models.CharField(max_length=255, null=True)
     # video and slide best field?
     # projectVideo = models.ImageField(upload_to='uploads/', null=True)
     # slides = models.FileField(upload_to='uploads/', null=True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
     portfolio = models.ManyToManyField(Portfolio, related_name = "project")
+    user = models.ForeignKey(User, related_name = "project", on_delete = models.CASCADE, null = True)
+    
 
 class Skill(models.Model):
     languages = models.TextField(null=True) #using json to 'cast' list into a string

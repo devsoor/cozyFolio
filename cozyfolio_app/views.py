@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import User, Portfolio, Project, Skill, SocialMedia
-from .forms import LanguagesForm, FrameworksForm, DatabasesForm, CloudsForm
+from .forms import LanguagesForm
 from django.contrib import messages
 import bcrypt
 from datetime import date, datetime, timezone, timedelta
@@ -35,17 +35,15 @@ def registerUser(request):
         if len(this_user) != 0:
             return redirect("/")
 
-
+        smLinkedIn = SocialMedia.objects.create(name="LinkedIn")
+        smGithub = SocialMedia.objects.create(name="GitHub")
+        smStackoverflow = SocialMedia.objects.create(name="Stack Overflow")
 
         this_user = User.objects.create(firstName=registerFormFirstName, lastName=registerFormLastName, email=registerFormEmail, password=hashPassword)
-        smLinkedIn = SocialMedia.objects.create(name="LinkedIn", user=this_user)
-        smGithub = SocialMedia.objects.create(name="GitHub", user=this_user)
-        smStackoverflow = SocialMedia.objects.create(name="Stack Overflow", user=this_user)
-        this_skill = Skill.objects.create(user=this_user)
-        # smLinkedIn.user = this_user
-        # smGithub.user = this_user
-        # smStackoverflow.user = this_user
-        # this_skill.user = this_user
+        smLinkedIn.user = this_user
+        smGithub.user = this_user
+        smStackoverflow.user = this_user
+        this_user.save()
 
         request.session["firstName"] = registerFormFirstName
         request.session['userEmail'] = registerFormEmail
@@ -99,33 +97,24 @@ def setNewPassword(request):
 
 def dashboard(request):
     this_user = User.objects.get(email=request.session['userEmail'])
+    this_user.city = "Seattle"
+    this_user.state = "WA"
+    this_user.title = "Full Stack Developer"
+    this_user.resume = "static/img/resume_sample.pdf"
+    this_user.resume.name = f"{this_user.firstName}_{this_user.lastName}.pdf"
+    # this_user.skillSet = {
+    #     "Languages": ["Python", "JavaScript", "C#", "Java", "PHP", "Ruby", "C/C++", "SQL", "Swift", "Go"],
+    #     "Frameworks": ["Angular", "Django", "Vue", "React", ".NET"],
+    #     "Databases": ["MySQL", "MariaDB", "MongoDB", "PostgreSQL", "DynamoDB", "Amazon Aurora"],
+    #     "Other":["other skills"]
+    # }
+    this_user.headShot = "https://mdbootstrap.com/img/Photos/Others/men.jpg"
+    this_user.profileHighlight = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet."
     # create a temp portfolio and list of projects
-    print("languages in dashboard: ",this_user.skill.languages)
+
     user = User.objects.get(email = request.session['userEmail'])
     userPortfolios = user.portfolio.all()
-    projects = [
-        {
-            "id": 1,
-            "name":"Python Stack",
-            "type": "Bootcamp",
-            "image": "https://mdbootstrap.com/img/Photos/Horizontal/Nature/8-col/img%20(73).jpg",
-            "description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry'sstandard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-        },
-        {
-            "id": 2,
-            "name":"C-Sharp Stack",
-            "type": "Bootcamp",
-            "image": "https://mdbootstrap.com/img/Photos/Others/images/31.jpg",
-            "description":"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy."
-        },
-        {
-            "id": 3,
-            "name":"MEAN Stack",
-            "type": "Bootcamp",
-            "image": "https://mdbootstrap.com/img/Photos/Others/images/52.jpg",
-            "description":"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source."
-        },
-   ]
+    projects = Project.objects.all()
 
     socialMedia = {"linkedin": "https://www.linkedin.com/in/devsoor/", "gitHub":"https://github.com/devsoor/PythonStack"}
     context = {
@@ -161,6 +150,18 @@ def portfolioEdit(request, id):
 #
 # Project functions
 #
+def projectCreate(request):
+    pprint.pprint(request.POST)
+    newName  = request.POST['projectFormName']
+    newSummary = request.POST['projectFormSummary']
+    newTech = request.POST['projectFormTech']
+    newTeam = request.POST['projectFormTeam'] 
+    newProcess = request.POST['projectFormProcess']
+    newURL = request.POST['projectFormURL']
+    newUser = User.objects.get(email = request.session['userEmail'])
+    Project.objects.create(name = newName, summary = newSummary, techUsed = newTech, team = newTeam, process = newProcess, url = newURL,user = newUser )
+    return redirect('/dashboard')
+
 def projectNew(request):
     return render(request, "project.html")
 
@@ -173,22 +174,18 @@ def projectEdit(request, id):
 def userProfile(request):
     #create arr of lang list create arr of social media, two methods initializing the two models
 
-    formLanguages = LanguagesForm
-    formFrameworks = FrameworksForm
-    formDatabases = DatabasesForm
-    formClouds = CloudsForm
+    form = LanguagesForm
     this_user = User.objects.get(email=request.session['userEmail'])
     context = {
         "this_user": this_user,
-        "formLanguages": formLanguages,
-        "formFrameworks": formFrameworks,
-        "formDatabases": formDatabases,
-        "formClouds": formClouds,
+        "form": form,
     }
     return render(request, "userProfile.html", context)
 
 
 def userCreate(request):
+    pprint.pprint(request.POST)
+    print("request.method = ", request.method)
     errors = User.objects.userProfile_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
@@ -212,6 +209,9 @@ def userCreate(request):
         profileFormLinkedIn = request.POST["profileFormLinkedIn"]
         profileFormGithub = request.POST["profileFormGithub"]
         profileFormStackoverflow = request.POST["profileFormStackoverflow"]
+        # languages = request.POST.getlist("languages", None)
+        frameworks = request.POST.getlist("frameworks")
+        databases = request.POST.getlist("databases")
         profileHighlight = request.POST["profileHighlight"]
 
         this_user.firstName = profileFormFirstName
@@ -226,56 +226,27 @@ def userCreate(request):
         this_user.resume = profileFormResume
         this_user.headshot = profileFormHeadshot
 
-        formLanguages = LanguagesForm(request.POST)
-        formFrameworks = FrameworksForm(request.POST)
-        formDatabases = DatabasesForm(request.POST)
-        formClouds = CloudsForm(request.POST)
-
-
-        if formLanguages.is_valid():
-            languages = formLanguages.cleaned_data.get('languages')
+        form = LanguagesForm(request.POST)
+        print("=====================> FORM", form)
+        pprint.pprint(form)
+        if form.is_valid():
+            languages = form.cleaned_data.get('languages')
+            print("=====================> languages", languages)
         else:
             languages = []
 
-        if formFrameworks.is_valid():
-            frameworks = formFrameworks.cleaned_data.get('frameworks')
-        else:
-            frameworks = []
+        print("=======AFTRER=======> languages", languages)
 
-        if formDatabases.is_valid():
-            databases = formDatabases.cleaned_data.get('databases')
-        else:
-            databases = []
-
-        if formClouds.is_valid():
-            clouds = formClouds.cleaned_data.get('clouds')
-        else:
-            clouds = []
-
-        print("languages = ", languages)
-        print("frameworks = ", frameworks)
-        print("databases = ", databases)
-        print("clouds = ", clouds)
-
-
-        skill = Skill.objects.get(user=this_user)
-        skill.languages = languages
-        skill.frameworks = frameworks
-        skill.databases = databases
-        skill.clouds = clouds
-        skill.save()
+        this_user.skill.languages = languages
+        this_user.skill.databases = databases
+        this_user.skill.frameworks = frameworks
 
         # get social media
         smLinkedIn = SocialMedia.objects.filter(name="LinkedIn", user=this_user)
-        smLinkedIn.url = profileFormLinkedIn
-        smLinkedIn.save()
         smGithub = SocialMedia.objects.filter(name="GitHub", user=this_user)
-        smGithub.url = profileFormGithub
-        smGithub.save()
         smStackoverflow = SocialMedia.objects.filter(name="Stack Overflow", user=this_user)
-        smStackoverflow.url = profileFormStackoverflow
-        smStackoverflow.save()
         
+        this_user.save()
         request.session["firstName"] = profileFormFirstName
         request.session['userEmail'] = profileFormEmail
 

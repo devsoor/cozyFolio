@@ -18,6 +18,7 @@ urlpatterns = [
     path('portfolioCreate', views.portfolioCreate),
     path('portfolioEdit/<int:id>', views.portfolioEdit),
     # path('portfolioSave/<int:id>', views.portfolioSave),
+    path('projectCreate', views.projectCreate),
     path('projectNew', views.projectNew),
     path('projectEdit/<int:id>', views.projectEdit),
     # path('projectSave/<int:id>', views.projectSave),
