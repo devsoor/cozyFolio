@@ -1,6 +1,5 @@
 from django import forms
 
-
 class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
     def __init__(self, attrs=None):
         super(CustomCheckboxSelectMultiple, self).__init__(attrs)

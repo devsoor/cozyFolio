@@ -58,10 +58,15 @@ class UserManager(models.Manager):
 
         return errors
 
-    def userProfile_validator(self, postData):
-        if not postData:
-            return
+    def userProfile_validator(self, postData, filesData):
+        print("userProfile_validator: filesData = ")
+        pprint.pprint(filesData)
+
         errors = {}
+        if len(filesData) == 0:
+            errors['filesData'] = "No resume or picture uploaded"
+            return errors
+
         NAME_REGEX = re.compile ('[a-zA-Z_]')
 
         if NAME_REGEX.match(postData['profileFormFirstName']) == None or len(postData['profileFormFirstName']) < 2:
@@ -76,6 +81,12 @@ class UserManager(models.Manager):
 
         if len(postData['profileFormEmail']) < 8:
             errors['profileFormEmail'] = "Password must be atleast 8 characters long"
+
+        if len(filesData['profileFormResume']) < 3:
+            errors['profileFormResume'] = "Resume file must be uploaded"
+
+        if len(filesData['profileFormHeadshot']) < 3:
+            errors['profileFormHeadshot'] = "Your picture must be uploaded"
 
         return errors
 
@@ -92,8 +103,8 @@ class User(models.Model):
     zipCode = models.CharField(max_length=10, null=True)
     title = models.CharField(max_length=100, null=True)
     profileHighlight = models.TextField(null=True)
-    resume = models.FileField(upload_to='uploads/', null=True)
-    headshot = models.ImageField(upload_to='uploads/', null=True)
+    resume = models.FileField(upload_to='media/', null=True)
+    headshot = models.ImageField(upload_to='media/', null=True)
     # skillLanguages = models.TextField(null=True) #using json to 'cast' list into a string
     # skillFrameWorks = models.TextField(null=True) #using json to 'cast' list into a string
     # skillDatabases = models.TextField(null=True) #using json to 'cast' list into a string
@@ -110,7 +121,7 @@ class Portfolio(models.Model):
     name = models.CharField(max_length=75)
     title = models.CharField(max_length=100, null=True)
     portfolioSummary = models.TextField(null=True)
-    resume = models.FileField(upload_to='uploads/', null=True)
+    resume = models.FileField(upload_to='media/', null=True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
     user = models.ForeignKey(User, related_name = "portfolio", on_delete = models.CASCADE, null = True)
@@ -147,7 +158,7 @@ class Skill(models.Model):
 class SocialMedia(models.Model):
     name = models.CharField(max_length = 100, null=True)
     url = models.CharField(max_length = 255, null=True)
-    logo = models.ImageField(upload_to='uploads/', null=True)
+    logo = models.ImageField(upload_to='media/', null=True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
     user = models.ForeignKey(User, related_name = "socialMedia", on_delete = models.CASCADE, null = True)

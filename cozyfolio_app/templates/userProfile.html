@@ -31,7 +31,7 @@
       <div class="col-lg-8 col-md-12">
         <div class="card card-cascade wider mb-4 wow fadeIn">
           <div class="card-body card-body-cascade text-left">
-            <form action="userCreate" method="post" class="p-5">
+            <form action="userCreate" enctype="multipart/form-data" method="post" class="p-5">
               {% csrf_token %}
               <p class="h4 mb-4">User Profile</p>
 

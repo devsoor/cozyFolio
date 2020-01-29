@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from .models import User, Portfolio, Project, Skill, SocialMedia
-from .forms import LanguagesForm
+from .forms import LanguagesForm, FrameworksForm, DatabasesForm, CloudsForm
+from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 import bcrypt
 from datetime import date, datetime, timezone, timedelta
 import pytz
 import pprint
 from django.db.models import Q
+import json
+import ast
+import urllib.parse
 
 
 # Skill.objects.create(languages = langList, frameworks = frameworkList, databases = databaseList, other = otherList)
@@ -35,15 +39,11 @@ def registerUser(request):
         if len(this_user) != 0:
             return redirect("/")
 
-        smLinkedIn = SocialMedia.objects.create(name="LinkedIn")
-        smGithub = SocialMedia.objects.create(name="GitHub")
-        smStackoverflow = SocialMedia.objects.create(name="Stack Overflow")
-
         this_user = User.objects.create(firstName=registerFormFirstName, lastName=registerFormLastName, email=registerFormEmail, password=hashPassword)
-        smLinkedIn.user = this_user
-        smGithub.user = this_user
-        smStackoverflow.user = this_user
-        this_user.save()
+        smLinkedIn = SocialMedia.objects.create(name="LinkedIn", user=this_user)
+        smGithub = SocialMedia.objects.create(name="GitHub", user=this_user)
+        smStackoverflow = SocialMedia.objects.create(name="Stack Overflow", user=this_user)
+        this_skill = Skill.objects.create(user=this_user)
 
         request.session["firstName"] = registerFormFirstName
         request.session['userEmail'] = registerFormEmail
@@ -95,25 +95,38 @@ def forgotPasswordSendEmail(request):
 def setNewPassword(request):
     return render(request, "login.html")
 
+def convertStrToArray(obj):
+    x = ast.literal_eval(obj)
+    arr = []
+    for item in x:
+        arr.append(item)
+    return arr
+
 def dashboard(request):
     this_user = User.objects.get(email=request.session['userEmail'])
-    this_user.city = "Seattle"
-    this_user.state = "WA"
-    this_user.title = "Full Stack Developer"
-    this_user.resume = "static/img/resume_sample.pdf"
-    this_user.resume.name = f"{this_user.firstName}_{this_user.lastName}.pdf"
-    # this_user.skillSet = {
-    #     "Languages": ["Python", "JavaScript", "C#", "Java", "PHP", "Ruby", "C/C++", "SQL", "Swift", "Go"],
-    #     "Frameworks": ["Angular", "Django", "Vue", "React", ".NET"],
-    #     "Databases": ["MySQL", "MariaDB", "MongoDB", "PostgreSQL", "DynamoDB", "Amazon Aurora"],
-    #     "Other":["other skills"]
-    # }
-    this_user.headShot = "https://mdbootstrap.com/img/Photos/Others/men.jpg"
-    this_user.profileHighlight = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet."
-    # create a temp portfolio and list of projects
 
-    user = User.objects.get(email = request.session['userEmail'])
-    userPortfolios = user.portfolio.all()
+    if this_user.skill.languages != None:
+        langList = convertStrToArray(this_user.skill.languages) 
+    else:
+        langList = []
+
+    if this_user.skill.frameworks != None:
+        fwList = convertStrToArray(this_user.skill.frameworks)
+    else:
+        fwList = []
+
+    if this_user.skill.databases != None:
+        dbList = convertStrToArray(this_user.skill.databases)
+    else:
+        dbList = []
+
+    if this_user.skill.clouds != None:    
+        cloudList = convertStrToArray(this_user.skill.clouds)
+    else:
+        cloudList = []
+       
+
+    userPortfolios = this_user.portfolio.all()
     projects = Project.objects.all()
 
     socialMedia = {"linkedin": "https://www.linkedin.com/in/devsoor/", "gitHub":"https://github.com/devsoor/PythonStack"}
@@ -122,6 +135,10 @@ def dashboard(request):
         "portfolios": userPortfolios,
         "projects": projects,
         "socialMedia": socialMedia,
+        "langList": langList,
+        "fwList": fwList,
+        "dbList": dbList,
+        "cloudList": cloudList,
     }
     return render(request, "dashboard.html", context)
 
@@ -190,19 +207,22 @@ def projectEdit(request, id):
 def userProfile(request):
     #create arr of lang list create arr of social media, two methods initializing the two models
 
-    form = LanguagesForm
+    formLanguages = LanguagesForm
+    formFrameworks = FrameworksForm
+    formDatabases = DatabasesForm
+    formClouds = CloudsForm
     this_user = User.objects.get(email=request.session['userEmail'])
     context = {
         "this_user": this_user,
-        "form": form,
+        "formLanguages": formLanguages,
+        "formFrameworks": formFrameworks,
+        "formDatabases": formDatabases,
+        "formClouds": formClouds,
     }
     return render(request, "userProfile.html", context)
 
-
 def userCreate(request):
-    pprint.pprint(request.POST)
-    print("request.method = ", request.method)
-    errors = User.objects.userProfile_validator(request.POST)
+    errors = User.objects.userProfile_validator(request.POST, request.FILES)
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
@@ -220,14 +240,11 @@ def userCreate(request):
         country = request.POST["country"]
         state = request.POST["state"]
         city = request.POST["city"]
-        profileFormResume = request.POST["profileFormResume"]
-        profileFormHeadshot = request.POST["profileFormHeadshot"]
+        # profileFormResume = request.FILES["profileFormResume"]
+        # profileFormHeadshot = request.FILES["profileFormHeadshot"]
         profileFormLinkedIn = request.POST["profileFormLinkedIn"]
         profileFormGithub = request.POST["profileFormGithub"]
         profileFormStackoverflow = request.POST["profileFormStackoverflow"]
-        # languages = request.POST.getlist("languages", None)
-        frameworks = request.POST.getlist("frameworks")
-        databases = request.POST.getlist("databases")
         profileHighlight = request.POST["profileHighlight"]
 
         this_user.firstName = profileFormFirstName
@@ -239,29 +256,64 @@ def userCreate(request):
         this_user.state = state
         this_user.city = city
         this_user.profileHighlight = profileHighlight
-        this_user.resume = profileFormResume
-        this_user.headshot = profileFormHeadshot
 
-        form = LanguagesForm(request.POST)
-        print("=====================> FORM", form)
-        pprint.pprint(form)
-        if form.is_valid():
-            languages = form.cleaned_data.get('languages')
-            print("=====================> languages", languages)
+
+        formLanguages = LanguagesForm(request.POST)
+        formFrameworks = FrameworksForm(request.POST)
+        formDatabases = DatabasesForm(request.POST)
+        formClouds = CloudsForm(request.POST)
+
+        resumefile = request.FILES['profileFormResume']
+        fs = FileSystemStorage()
+        resume_filename = fs.save(resumefile.name, resumefile)
+        this_user.resume = fs.url(resume_filename)
+        print("---------------> this_user.resume: ", this_user.resume)
+
+        headshotfile = request.FILES['profileFormHeadshot']
+        fs = FileSystemStorage()
+        headshot_filename = fs.save(headshotfile.name, headshotfile)
+        this_user.headshot = fs.url(headshot_filename)
+        print("---------------> this_user.headshot: ", this_user.headshot)
+
+        if formLanguages.is_valid():
+            languages = formLanguages.cleaned_data.get('languages')
         else:
             languages = []
 
-        print("=======AFTRER=======> languages", languages)
+        if formFrameworks.is_valid():
+            frameworks = formFrameworks.cleaned_data.get('frameworks')
+        else:
+            frameworks = []
 
-        this_user.skill.languages = languages
-        this_user.skill.databases = databases
-        this_user.skill.frameworks = frameworks
+        if formDatabases.is_valid():
+            databases = formDatabases.cleaned_data.get('databases')
+        else:
+            databases = []
+
+        if formClouds.is_valid():
+            clouds = formClouds.cleaned_data.get('clouds')
+        else:
+            clouds = []
+
+        skill = Skill.objects.get(user=this_user)
+        skill.languages = languages
+        skill.frameworks = frameworks
+        skill.databases = databases
+        skill.clouds = clouds
+        skill.save()
 
         # get social media
-        smLinkedIn = SocialMedia.objects.filter(name="LinkedIn", user=this_user)
-        smGithub = SocialMedia.objects.filter(name="GitHub", user=this_user)
-        smStackoverflow = SocialMedia.objects.filter(name="Stack Overflow", user=this_user)
-        
+        smLinkedIn = SocialMedia.objects.get(name="LinkedIn", user=this_user)
+        smLinkedIn.url = profileFormLinkedIn
+        smLinkedIn.save()
+        smGithub = SocialMedia.objects.get(name="GitHub", user=this_user)
+        smGithub.url = profileFormGithub
+        smGithub.save()
+        smStackoverflow = SocialMedia.objects.get(name="Stack Overflow", user=this_user)
+
+        smStackoverflow.url = profileFormStackoverflow
+        smStackoverflow.save()
+
         this_user.save()
         request.session["firstName"] = profileFormFirstName
         request.session['userEmail'] = profileFormEmail
