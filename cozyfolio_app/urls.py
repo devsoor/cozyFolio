@@ -17,6 +17,7 @@ urlpatterns = [
     path('portfolioNew', views.portfolioNew),
     path('portfolioCreate', views.portfolioCreate),
     path('portfolioEdit/<int:id>', views.portfolioEdit),
+    path('portfolioEdit/portfolioUpdate/<int:id>', views.portfolioUpdate),
     # path('portfolioSave/<int:id>', views.portfolioSave),
     path('projectCreate', views.projectCreate),
     path('projectNew', views.projectNew),

@@ -120,12 +120,12 @@
         <a href="#" class="list-group-item list-group-item-action waves-effect">
           <i class="fas fa-user mr-3"></i>Portfolios</a>
             {% for folio in portfolios %}
-              <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect" target="_blank">{{folio.name}}</a>
+              <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect" target="">{{folio.name}}</a>
             {% endfor %}
         <a href="#" class="list-group-item list-group-item-action waves-effect">
           <i class="fas fa-table mr-3"></i>Projects</a>
           {% for proj in projects %}
-            <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect" target="_blank">{{proj.name}}</a>
+            <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect" target="">{{proj.name}}</a>
           {% endfor %}
         <a href="#" class="list-group-item list-group-item-action waves-effect">
           <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
@@ -193,7 +193,7 @@
             <td>{{proj.name}}</td>
            
               <td>
-                {% for tech in proj.technologies %}
+                {% for tech in proj.techUsed %}
                 {{tech}}
                 {% endfor %}
               </td>

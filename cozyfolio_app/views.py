@@ -144,8 +144,24 @@ def portfolioNew(request):
 
 
 def portfolioEdit(request, id):
-    return render(request, "portfolio.html")
+    portfolioToEdit = Portfolio.objects.get(id = id);
+    context = {
+        'portfolio' : portfolioToEdit
+    }
+    return render(request, "portfolioEdit.html",context)
 
+def portfolioUpdate(request,id):
+    updatedName  = request.POST['portfolioFormName']
+    updatedTitle = request.POST['portfolioFormJobTitle']
+    updatedSummary = request.POST['portfolioFormSummary']
+    updatedResume = request.POST['portfolioFormResume']
+    portToBeUpdated = Portfolio.objects.get(id = id)
+    portToBeUpdated.name = updatedName
+    portToBeUpdated.title = updatedTitle
+    portToBeUpdated.portfolioSummary = updatedSummary
+    portToBeUpdated.resume = updatedResume
+    portToBeUpdated.save()
+    return redirect('/dashboard')
 
 #
 # Project functions
