@@ -29,8 +29,8 @@
   <header id="header">
     {% block header %}
     <!--Navbar -->
-    <nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color">
-      <a class="navbar-brand logo-wrapper waves-effect" href="/dashboard">
+    <nav class="mb-2 navbar navbar-expand-lg navbar-dark primary-color">
+      <a class="navbar-brand logo-wrapper waves-effect " href="/dashboard">
         <img src="static/img/cozyfolio_logo.png" class="img-fluid" alt="">
       </a>
       <!-- <a class="navbar-brand" href="#">Welcome, {{this_user.firstName}} from {{this_user.city}}</a> -->
@@ -43,32 +43,14 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
-              Portolio
+              Add
             </a>
             <div class="dropdown-menu dropdown-mfenu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <a class="dropdown-item" href="/portfolioNew">New..</a>
-              <!-- <a class="dropdown-item" href="/portfolioEdit/{{portfolio.id}}">Edit..</a>
-              <a class="dropdown-item" href="/portfolioEdit/{{portfolio.id}}">Save</a>
-              <a class="dropdown-item" href="#"">New..</a> -->
-              <!-- <a class="dropdown-item" href="#">Edit..</a> -->
-              <a class="dropdown-item" href="#">Save</a>
+              <a class="dropdown-item" href="/portfolioNew">New Portfolio...</a>
+              <a class="dropdown-item" href="/projectNew">New Project..</a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Project
-            </a>
-            <div class="dropdown-menu dropdown-mfenu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <a class="dropdown-item" href="/projectNew">New..</a>
-              <!-- 
-              <a class="dropdown-item" href="/projectEdit/{{project.id}}">Edit..</a>
-              <a class="dropdown-item" href="/projectSave/{{project.id}}">Save</a> -->
-              <!-- <a class="dropdown-item" href="#">New..</a> -->
-              <!-- <a class="dropdown-item" href="#">Edit..</a> -->
-              <a class="dropdown-item" href="#">Save</a>
-            </div>
-          </li>
+         
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
@@ -113,21 +95,21 @@
   </header>
 
   <!-- Sidebar -->
-  <div id="sidebar" class="sidebar-fixed position-fixed">
+  <div id="sidebar" class="sidebar-fixed position-fixed stylish-color white">
     {% block sidebar %}
     <div class="list-group list-group-flush">
-      <a href="#" class="list-group-item active waves-effect">
+      <!-- <a href="#" class="list-group-item active waves-effect">
         <i class="fas fa-chart-pie mr-3"></i>Manage
-      </a>
+      </a> -->
       <a href="#" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-user mr-3"></i>Portfolios</a>
       {% for folio in portfolios %}
-      <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect" target="_blank">{{folio.name}}</a>
+      <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect text-white" target="_blank">{{folio.name}}</a>
       {% endfor %}
       <a href="#" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-table mr-3"></i>Projects</a>
       {% for proj in projects %}
-      <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect" target="_blank">{{proj.name}}</a>
+      <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect text-white" target="_blank">{{proj.name}}</a>
       {% endfor %}
       <a href="#" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
@@ -139,115 +121,174 @@
   <!-- Sidebar -->
 
   <!--Main layout-->
-  <main id="content" class="pt-3 mx-lg-5">
+  <main id="content" class="pt-3 mx-lg-2">
     {% block content %}
-    <div class="container-fluid mt-5">
+    <div class="container-fluid">
       <div class="row wow fadeIn">
 
         <div class="col-lg-8 col-md-12">
           <div class="card card-cascade wider mb-4 wow fadeIn">
             <div class="card-body card-body-cascade text-left">
               <div class="form-group">
-                <label for="portfolioSummary">My Skills Summary</label>
-                <textarea class="form-control rounded-0" id="portfolioSummary" rows="5">
-                        {{this_user.profileHighlight}}
-                      </textarea>
+
+              <div class="card text-white bg-info mb-3">
+                <!-- <div class="card-header">About Me</div> -->
+                <div class="card-body">
+                  <h5 class="card-title">About Me</h5>
+                  <p class="card-text text-white">{{this_user.profileHighlight}}</p>
+                </div>
+              </div>
               </div>
               <!-- <hr> -->
-              <div class="row">
-                <div class="col-lg-3 col-md-12">
-                  <table id="tableLanguages">
-                    <tr>
-                      <th>Languages</th>
-                    </tr>
-                    {% for lang in langList %}
-                    <tr>
-                      <td>{{lang}}</td>
-                    </tr>
-                    {% endfor %}
-                  </table>
-                </div>
+              <!-- <div class="card mb-3"> -->
+                  <div class="row">
+                        <div class="col-lg-3 col-md-12">
+                          <div class="card-body text-white #e65100 orange darken-4">
 
-                <div class="col-lg-3 col-md-12">
-                  <table id="tableFrameworks">
-                    <tr>
-                      <th>Frameworks</th>
-                    </tr>
-                    {% for fw in fwList %}
-                    <tr>
-                      <td>{{fw}}</td>
-                    </tr>
-                    {% endfor %}
-                  </table>
-                </div>
+                          <table id="tableLanguages">
+                            <tr>
+                              <th><h5>Languages </h5></th>
+                            </tr>
+                            {% for lang in langList %}
+                            <tr>
+                              <td>{{lang}}</td> 
+                            </tr>
+                            {% endfor %}
+                          </table>
+                        </div>
+                    </div>
 
-                <div class="col-lg-3 col-md-12">
-                  <table id="tableDatabases">
-                    <tr>
-                      <th>Databases</th>
-                    </tr>
-                    {% for db in dbList %}
-                    <tr>
-                      <td>{{db}}</td>
-                    </tr>
-                    {% endfor %}
-                  </table>
-                </div>
-                <div class="col-lg-3 col-md-12">
-                  <table id="tableClouds">
-                    <tr>
-                      <th>Cloud Platforms</th>
-                    </tr>
-                    {% for cloud in cloudList %}
-                    <tr>
-                      <td>{{cloud}}</td>
-                    </tr>
-                    {% endfor %}
-                  </table>
-                </div>
-              </div>
+                          <div class="col-lg-3 col-md-12">
+                            <div class="card-body text-white bg-primary">
+
+                            <table id="tableFrameworks">
+                              <tr>
+                                <th><h5>Frameworks</h5></th>
+                              </tr>
+                              {% for fw in fwList %}
+                              <tr>
+                                <td>{{fw}}</td>
+                              </tr>
+                              {% endfor %}
+                            </table>
+                          </div>
+                    </div>
+
+                        <div class="col-lg-3 col-md-12">
+                          <div class="card-body text-white secondary-color">
+
+                          <table id="tableDatabases">
+                            <tr>
+                              <th><h5>Databases</h5></th>
+                            </tr>
+                            {% for db in dbList %}
+                            <tr>
+                              <td>{{db}}</td>
+                            </tr>
+                            {% endfor %}
+                          </table>
+                        </div>
+                    </div>
+
+                        <div class="col-lg-3 col-md-12">
+                          <div class="card-body text-white default-color-dark">
+
+                          <table id="tableClouds">
+                            <tr>
+                              <th><h5>Cloud</h5></th>
+                            </tr>
+                            {% for cloud in cloudList %}
+                            <tr>
+                              <td>{{cloud}}</td>
+                            </tr>
+                            {% endfor %}
+                          </table>
+                        </div>
+                    </div>
+                  </div>
+              <!-- </div> -->
             </div>
           </div>
         </div>
 
 
         <div class="col-lg-4 col-md-12 text-center">
-          <div class="avatar mx-auto white"><img src="{{this_user.headShot}}" alt="avatar mx-auto white"
-              class="rounded-circle img-fluid">
-            <h4 class="card-title"><strong>{{this_user.firstName}} {{this_user.lastName}}</strong></h4>
-            <a class="btn btn-primary" href="" download="{{this_user.resume}}"><i class="fa fa-download"></i>
-              {{this_user.resume}}
-            </a>
-          </div>
+          <div class="card card-cascade wider mb-4 wow fadeIn">
+            <div class="card-body card-body-cascade text-center">
+              <div class="avatar mx-auto white"><img src="https://mdbootstrap.com/img/Photos/Others/men.jpg" alt=""
+                  class=" img-fluid">
+                <h4 class="card-title font-weight-bold indigo-text pb-5"><strong>{{this_user.firstName}} {{this_user.lastName}}</strong></h4>
 
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="portfolioFormResume">Upload</span>
+                  </div>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="portfolioFormResume" name="portfolioFormResume"
+                      aria-describedby="portfolioFormResume">
+                    <label class="custom-file-label" for="portfolioFormResume">Upload resume</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
+      <div class="row wow fadeIn">
+          <div class="col-lg-12 col-md-12">
+              <div class="card card-cascade wider mb-4 wow fadeIn">
+                <div class="card-body card-body-cascade text-left">
+                  <div class="row wow fadeIn">
 
-      <table class="table table-striped table-bordered ">
-        <thead class="black white-text">
-          <tr>
-            <th scope="col">Project</th>
-            <th scope="col">Technologies</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for proj in projects %}
-          <tr>
-            <td>{{proj.name}}</td>
+
+                  <div class="col-lg-3">
+                    <div class="list-group">
+                      <a href="#!" class="list-group-item list-group-item-action active">
+                        Portfolios
+                      </a>
+                      {% for folio in portfolios %}
+                          <a href="pickPortfolio{{folio.id}}" class="list-group-item list-group-item-action">{{folio.name}}</a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-lg-9">
+                    {% for proj in projects %}
+                    <div class="col-lg-4 col-md-12">
+                      <div class="card card-cascade wider mb-4 wow fadeIn">
+                        <!--Card image-->
+                        <div class="view view-cascade overlay">
+                          <img src="{{proj.picImage}}" class="card-img-top"
+                            alt="wider">
+          
+                        </div>
+                        <!--/Card image-->
+          
+                        <!--Card content-->
+                        <div class="card-body card-body-cascade text-center">
+                              <!--Title-->
+                              <h5 class="indigo-text"><strong>{{proj.name}}</strong></h5>
+                      
+                              <p class="card-text">{{proj.summary}} </p>
+                              <form action="/projectEdit/{{proj.id}}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
+                              </form>
+                        </div> 
+                      </div> 
+                    </div>
+                  {% endfor %}                 
+                 </div>
+                </div>
+                  
            
-              <td>
-                {% for tech in proj.techUsed %}
-                {{tech}}
-                {% endfor %}
-              </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+                </div>
+          </div>
+        </div>
+      </div> 
 
-      <div class="row row d-flex justify-content-center">
-        <div class="col-md-6">
+      <div class="row wow fadeIn">
+        <div class="col-md-12">
           <div class="card card-cascade wider mb-4 wow fadeIn">
             <div class="card-body card-body-cascade text-center">
               <h4>Contact info:</h4>

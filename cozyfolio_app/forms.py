@@ -1,4 +1,5 @@
 from django import forms
+from .models import User
 
 class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
     def __init__(self, attrs=None):
@@ -107,3 +108,8 @@ class CloudsForm(forms.Form):
     ]
 
     clouds = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=OPTIONS)
+
+class PDFForm(forms.ModelForm):
+    class Meta:
+        model: User
+        fields: ['resume']

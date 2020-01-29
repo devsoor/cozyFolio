@@ -50,8 +50,26 @@
                 <textarea class="form-control rounded-0" id="projectFormProcess" name="projectFormProcess"
                   rows="3"></textarea>
               </div>
+
+              <div class="form-row mb-4">
+                  <div class="col-md">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="profileFormHeadshot0">Upload Image</span>
+                      </div>
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="projectFormImage"
+                          name="projectFormImage" aria-describedby="profileFormHeadshot0">
+                        <label class="custom-file-label" for="projectFormImage">Choose file</label>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
               <label for="projectFormURL">URL for Project</label>
               <input type="text" id="projectFormURL" name="projectFormURL" class="form-control mb-4">
+
+              <!-- <input type="text" id="projectFormImage" name="projectFormImage" class="form-control mb-4"> -->
               <div class="row justify-content-end">
                 <button class="btn btn-info" type="cancel">Cancel</button>
                 <button class="btn btn-info" type="submit">Save</button>

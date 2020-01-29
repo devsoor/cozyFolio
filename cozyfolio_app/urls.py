@@ -1,5 +1,7 @@
 from django.urls import path     
 from . import views
+
+
 urlpatterns = [
     path('home', views.signin),	      
     path('', views.index),	      
@@ -18,6 +20,7 @@ urlpatterns = [
     path('portfolioCreate', views.portfolioCreate),
     path('portfolioEdit/<int:id>', views.portfolioEdit),
     path('portfolioEdit/portfolioUpdate/<int:id>', views.portfolioUpdate),
+    path('pickPortfolio/<int:id>', views.pickPortfolio),
     # path('portfolioSave/<int:id>', views.portfolioSave),
     path('projectCreate', views.projectCreate),
     path('projectNew', views.projectNew),
