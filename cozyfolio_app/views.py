@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import User, Portfolio, Project, Skill, SocialMedia
-from .forms import LanguagesForm, FrameworksForm, DatabasesForm, CloudsForm
+from .forms import LanguagesForm, FrameworksForm, DatabasesForm, CloudsForm, PDFForm
 from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 import bcrypt
@@ -11,9 +11,12 @@ from django.db.models import Q
 import json
 import ast
 import urllib.parse
+import os
 
-
-# Skill.objects.create(languages = langList, frameworks = frameworkList, databases = databaseList, other = otherList)
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'cozyfolio_app/static/media/')
+print("========================> MEDIA_ROOT: ", MEDIA_ROOT)
 
 
 def index(request):
@@ -125,7 +128,6 @@ def dashboard(request):
     else:
         cloudList = []
        
-
     userPortfolios = this_user.portfolio.all()
     projects = Project.objects.all()
 
@@ -211,6 +213,12 @@ def portfolioUpdate(request,id):
     portToBeUpdated.save()
     return redirect('/dashboard')
 
+def pickPortfolio(request, id):
+    this_portfolio = Portfolio.objects.get(id = id);
+    projects = Project.objects.filter(portfolio=this_portfolio)
+
+    return render(request, "dashboard.html", {"projects": projects})
+
 #
 # Project functions=============================================================================================
 #
@@ -263,6 +271,7 @@ def userProfile(request):
     formFrameworks = FrameworksForm
     formDatabases = DatabasesForm
     formClouds = CloudsForm
+    # pdfForm = PDFForm()
     this_user = User.objects.get(email=request.session['userEmail'])
     context = {
         "this_user": this_user,

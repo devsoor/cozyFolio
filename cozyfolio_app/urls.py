@@ -1,5 +1,7 @@
 from django.urls import path     
 from . import views
+
+
 urlpatterns = [
     path('home', views.signin),	      
     path('', views.index),	      
@@ -18,7 +20,11 @@ urlpatterns = [
     path('portfolioCreate', views.portfolioCreate),
     path('portfolioEdit/<int:id>', views.portfolioEdit),
     path('portfolioEdit/portfolioUpdate/<int:id>', views.portfolioUpdate),
+<<<<<<< HEAD
     path('portfolioEdit/assignProject/<int:val>',views.assignProject),
+=======
+    path('pickPortfolio/<int:id>', views.pickPortfolio),
+>>>>>>> 387c19d20edf5b30fef24280294ed6347ebcc3ca
     # path('portfolioSave/<int:id>', views.portfolioSave),
     path('projectCreate', views.projectCreate),
     path('projectNew', views.projectNew),

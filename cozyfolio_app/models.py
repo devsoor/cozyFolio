@@ -82,20 +82,23 @@ class UserManager(models.Manager):
         if len(postData['profileFormEmail']) < 8:
             errors['profileFormEmail'] = "Password must be atleast 8 characters long"
 
-        if len(filesData['profileFormResume']) < 3:
-            errors['profileFormResume'] = "Resume file must be uploaded"
+        # if !hasattr(filesData, 'profileFormResume'):
+        #     errors['profileFormResume'] = "Resume file must be uploaded"
 
-        if len(filesData['profileFormHeadshot']) < 3:
-            errors['profileFormHeadshot'] = "Your picture must be uploaded"
+        # if !hasattr(filesData, 'profileFormHeadshot'):
+        #     errors['profileFormHeadshot'] = "Your picture must be uploaded"
 
         return errors
+
+class PdfFile(models.Model):
+    title = models.CharField(max_length=100)
+    pdf = models.FileField(upload_to='media/')
 
 class User(models.Model):
     firstName = models.CharField(max_length=75)
     lastName = models.CharField(max_length=75)
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=255)
-    # password = models.EMailField()
     address = models.CharField(max_length=100, null=True)
     country = models.CharField(max_length=100, null=True)
     state = models.CharField(max_length=10, null=True)
@@ -105,11 +108,6 @@ class User(models.Model):
     profileHighlight = models.TextField(null=True)
     resume = models.FileField(upload_to='media/', null=True)
     headshot = models.ImageField(upload_to='media/', null=True)
-    # skillLanguages = models.TextField(null=True) #using json to 'cast' list into a string
-    # skillFrameWorks = models.TextField(null=True) #using json to 'cast' list into a string
-    # skillDatabases = models.TextField(null=True) #using json to 'cast' list into a string
-    # skillOther = models.TextField(null=True) #using json to 'cast' list into a string
-    # socialM = models.TextField(null=True) #using json to 'cast' list into a string
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
     objects = UserManager()
@@ -134,7 +132,7 @@ class Project(models.Model):
     process = models.TextField(null=True)
     url = models.CharField(max_length=255, null=True)
     # video and slide best field?
-    # projectVideo = models.ImageField(upload_to='uploads/', null=True)
+    picImage = models.ImageField(upload_to='media/', null=True)
     # slides = models.FileField(upload_to='uploads/', null=True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
