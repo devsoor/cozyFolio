@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import User, Portfolio, Project, Skill, SocialMedia
+from .models import User, Portfolio, Project, Skill, SocialMedia, Job
 from .forms import LanguagesForm, FrameworksForm, DatabasesForm, CloudsForm, PDFForm
 from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
@@ -451,3 +451,97 @@ def websiteCreate(request):
         "cloudList": cloudList,
     }
     return render(request, "websiteCreate.html", context)
+
+def applyJob(request):
+    allPortfolios = Portfolio.objects.all()
+    context = {
+        "allPortfolios":allPortfolios
+    }
+    return render(request, "applyJob.html", context)
+
+def viewJob(request):
+    # print("########################", request.POST)
+    this_user = User.objects.get(email=request.session['userEmail'])
+
+    errors = Job.objects.job_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/applyJob')
+
+    title = request.POST['JobFormtitle']
+    company = request.POST['JobFormCompanyName']
+    applyDate = request.POST['JobFormforapplyDate']
+    respondDate = request.POST['JobFormforrespondDate']
+    response = request.POST['JobFormforresponse']
+    estSalary = request.POST['JobFormforestSalary']
+    portfolioId = request.POST['JobFormforportfolio']
+    offerReject = request.POST['jobFormforreject']
+    offerReceived = request.POST['jobFormforoffer']
+    thisPortfolio = Portfolio.objects.get(id=portfolioId)
+
+    # job = Job.objects.filter(jobTitle=title)
+    # if len(job)==0:
+    #     job = Job.objects.create(jobTitle=title, company=company, applyDate=applyDate, respondDate=respondDate, response=response, estSalary=estSalary, portfolio=thisPortfolio, user=this_user, offerReject=offerReject,numbofJobApplied=1, offerReceived=offerReceived, )
+    # else:
+    #     job = Job.objects.get(jobTitle=title)
+
+    #     numbofJobApplied = 1
+    # else:
+    #     numbofJobApplied += 1
+
+    # countcompany = Job.objects.filter(company=company)
+    # if len(countcompany) == 0:
+    #     numbofCompanyApplied =1
+    # else:
+    #     numbofCompanyApplied +=1
+
+    # countresponse = Job.objects.filter(response=response)
+    # if len(countresponse) == 0:
+    #     numbofCompanyApplied =1
+    # else:
+    #     numbofCompanyApplied +=1
+    # if respondDate == None:
+    #     newJob = Job.objects.create(jobTitle=title, company=company, applyDate=applyDate, response=response, estSalary=estSalary, portfolio=thisPortfolio, user=this_user, offerReject=offerReject, offerReceived=offerReceived)
+    # else:
+    newJob = Job.objects.create(jobTitle=title, company=company, applyDate=applyDate, respondDate=respondDate, response=response, estSalary=estSalary, portfolio=thisPortfolio, user=this_user, offerReject=offerReject, offerReceived=offerReceived)
+    # print("##############################", newJob)
+    return redirect("/dashboard")
+
+def updateJob(request,id):
+    thisJob = Job.objects.get(id=id)
+    allPortfolios = Portfolio.objects.all()
+    context ={
+        "thisJob" : thisJob,
+        "allPortfolios":allPortfolios
+    }
+    return render(request,"updateJob.html", context)
+
+
+def newJob(request,id):
+    print("request.POST=", request.POST)
+    this_user = User.objects.get(email=request.session['userEmail'])
+    editjob = Job.objects.get(id=id)
+
+    editjob.jobTitle = request.POST['JobFormtitle']
+    editjob.company = request.POST['JobFormCompanyName']
+    editjob.applyDate = request.POST['JobFormforapplyDate']
+    editjob.respondDate = request.POST['JobFormforrespondDate']
+    editjob.response = request.POST['JobFormforresponse']
+    editjob.estSalary = request.POST['JobFormforestSalary']
+    editjob.portfolioId = request.POST['JobFormforportfolio']
+    editjob.offerReject = request.POST['jobFormforreject']
+    editjob.offerReceived = request.POST['jobFormforoffer']
+    editjob.thisPortfolio = Portfolio.objects.get(id=portfolioId)
+
+    editjob.save()
+
+    return redirect("/dashboard")
+
+def jobStatistic(request):
+    thisJob = Job.objects.all()
+    context ={
+        "thisJob" : thisJob,
+    }
+
+    return render(request,"jobStatistic.html", context)

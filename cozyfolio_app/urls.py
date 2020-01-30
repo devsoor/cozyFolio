@@ -33,6 +33,12 @@ urlpatterns = [
     # path('projectSave/<int:id>', views.projectSave),
     path('websitePreview', views.websitePreview),
     path('websiteCreate', views.websiteCreate),
+    path('applyJob', views.applyJob),
+    path('viewJob', views.viewJob),
+    path('jobStatistic', views.jobStatistic),
+    path('updateJob/<int:id>', views.updateJob),
+    path('newJob/<int:id>', views.newJob),
+
 ]
 
 if settings:

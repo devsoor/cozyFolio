@@ -161,3 +161,40 @@ class SocialMedia(models.Model):
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)
     user = models.ForeignKey(User, related_name = "socialMedia", on_delete = models.CASCADE, null = True)
+
+class JobManager(models.Manager):
+    def job_validator(self, postData):
+        if not postData:
+            return
+        errors = {}
+        if len(postData['JobFormtitle']) < 2:
+            errors["JobFormtitle"] = "Title should be at least 2 characters"
+        if len(postData['JobFormCompanyName']) < 2:
+            errors["JobFormCompanyName"] = "Company name should be at least 2 characters"
+        if len(postData['JobFormforapplyDate']) == 8:
+            errors["JobFormforapplyDate"] = "You need to type the date. Date should be 8 characters"
+        if len(postData['JobFormforrespondDate']) == 8:
+            errors["JobFormforrespondDate"] = "You need to type the date.Date should be 8 characters"
+        if len(postData['JobFormforestSalary']) < 3:
+            errors["JobFormforestSalary"] = "You need to insert the estimate salary per month"
+        return errors
+    
+
+class Job(models.Model):
+    jobTitle = models.CharField(max_length=75)
+    company = models.CharField(max_length=75)
+    applyDate = models.DateField()
+    respondDate = models.DateField()
+    response = models.IntegerField()
+    estSalary = models.IntegerField()
+    portfolio = models.ForeignKey(Portfolio, related_name="jobs", on_delete = models.CASCADE)
+    user = models.ForeignKey(User, related_name="jobs", on_delete = models.CASCADE)
+    numbofJobApplied = models.IntegerField(null=True)
+    averageRespond = models.IntegerField(null=True)
+    offerReceived = models.IntegerField(null=True)
+    offerReject = models.IntegerField(null=True)
+    mostPopularPortfolio = models.CharField(max_length=75, null=True)
+    numbofCompanyApplied = models.IntegerField(null=True)
+    created_at = models.DateField(default=datetime.now)
+    updated_at = models.DateField(auto_now=True)
+    objects = JobManager()
