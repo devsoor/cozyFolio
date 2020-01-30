@@ -35,13 +35,15 @@
               {% csrf_token %}
               <p class="h4 mb-4"> Editing Portfolio...</p>
               <label for="portfolioFormName">Portfolio Name</label>
-              <input type="text" id="portfolioFormName" value="{{portfolio.name}}" name="portfolioFormName" class="form-control mb-4">
+              <input type="text" id="portfolioFormName" value="{{portfolio.name}}" name="portfolioFormName"
+                class="form-control mb-4">
               <label for="portfolioFormJobTitle">Job title applying for</label>
-              <input type="text" id="portfolioFormJobTitle" value="{{portfolio.title}}" name="portfolioFormJobTitle" class="form-control mb-4">
+              <input type="text" id="portfolioFormJobTitle" value="{{portfolio.title}}" name="portfolioFormJobTitle"
+                class="form-control mb-4">
 
               <div class="form-row mb-4">
                 <label for="portfolioFormSummary">Portfolio Summary</label>
-                <textarea class="form-control rounded-0"  id="portfolioFormSummary" name="portfolioFormSummary"
+                <textarea class="form-control rounded-0" id="portfolioFormSummary" name="portfolioFormSummary"
                   rows="8">{{portfolio.portfolioSummary}}</textarea>
               </div>
 
@@ -56,15 +58,42 @@
                       <span class="input-group-text" id="portfolioFormResume">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="portfolioFormResume" value="" name="portfolioFormResume"
-                        aria-describedby="portfolioFormResume">
+                      <input type="file" class="custom-file-input" id="portfolioFormResume" value=""
+                        name="portfolioFormResume" aria-describedby="portfolioFormResume">
                       <label class="custom-file-label" for="portfolioFormResume">{{portfolio.resume}}</label>
                     </div>
                   </div>
                 </div>
               </div>
+              <table class="table table-striped table-bordered ">
+                <thead class="black white-text">
+                  <tr>
+                    <th scope="col">Project</th>
+                    <th scope="col">Add</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  {% for proj in projects %}
+                  <tr>
+                    <td>{{proj.name}}</td>
+
+                    <td>
+                      <input type="checkbox" name="checks[]" value="{{proj.id}}">
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <ul>
+                {% for projects in assignedProjects %}
+                <li>{{projects.name}}</li>
+                {% endfor %}
+              </ul>
               <div class="row justify-content-end">
-                <button class="btn btn-info" type="cancel">Cancel</button>
+                <!-- <a href="/dashboard"><u>Cancel</u></a> -->
+                <button class="btn btn-info" onclick="window.location.replace('/dashboard'); return false;" type="cancel">Cancel</button>
                 <button class="btn btn-info" type="submit">Save</button>
               </div>
             </form>

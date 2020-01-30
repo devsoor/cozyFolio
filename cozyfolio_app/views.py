@@ -152,18 +152,43 @@ def portfolioCreate(request):
     newTitle = request.POST['portfolioFormJobTitle']
     newSummary = request.POST['portfolioFormSummary']
     newResume = request.POST['portfolioFormResume']
+    projList = request.POST.getlist('checks[]')
+    print(projList)
     newUser = User.objects.get(email = request.session['userEmail'])
-    Portfolio.objects.create(name = newName, title = newTitle, portfolioSummary = newSummary, resume = newResume,user = newUser)
+    newPort = Portfolio.objects.create(name = newName, title = newTitle, portfolioSummary = newSummary, resume = newResume,user = newUser)
+
+    for i in projList:
+        if Project.objects.get(id = i) in newPort.project.all():
+            continue
+        newPort.project.add(Project.objects.get(id = i))
+    print(newPort.project.all())
     return redirect('/dashboard')
     
 def portfolioNew(request):
-    return render(request, "portfolio.html")
+    currUser = User.objects.get(email = request.session['userEmail'])
+    allProj = currUser.project.all()
+    context = {
+        'projects': allProj
+    }
+    return render(request, "portfolio.html",context)
 
+def assignProject(request,val):
+    projectToAdd = Project.objects.get(id = val)
+    context = {
+        'addedProjects': projectToAdd,
+    }
+    return render(request,'portfolioEdit.html',context)
 
 def portfolioEdit(request, id):
-    portfolioToEdit = Portfolio.objects.get(id = id);
+    portfolioToEdit = Portfolio.objects.get(id = id)
+    currUser = User.objects.get(email = request.session['userEmail'])
+    allProj = currUser.project.all()
+    assignedProjects = portfolioToEdit.project.all()
+    #Below makes project available to portfolio
     context = {
-        'portfolio' : portfolioToEdit
+        'portfolio' : portfolioToEdit,
+        'projects':allProj,
+        'assignedProjects':assignedProjects,
     }
     return render(request, "portfolioEdit.html",context)
 
@@ -172,7 +197,13 @@ def portfolioUpdate(request,id):
     updatedTitle = request.POST['portfolioFormJobTitle']
     updatedSummary = request.POST['portfolioFormSummary']
     updatedResume = request.POST['portfolioFormResume']
+    newProjList = request.POST.getlist('checks[]')
     portToBeUpdated = Portfolio.objects.get(id = id)
+    for i in newProjList:
+        if Project.objects.get(id = i) in portToBeUpdated.project.all():
+            continue
+        portToBeUpdated.project.add(Project.objects.get(id = i))
+    print(portToBeUpdated.project.all())
     portToBeUpdated.name = updatedName
     portToBeUpdated.title = updatedTitle
     portToBeUpdated.portfolioSummary = updatedSummary
