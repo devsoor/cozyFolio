@@ -6,7 +6,7 @@ import re
 import bcrypt
 from datetime import date, datetime, timedelta
 import pprint
-
+from django.conf import settings
 # Create your models here.
 class UserManager(models.Manager):
     def register_validator(self, postData):
@@ -106,7 +106,7 @@ class User(models.Model):
     zipCode = models.CharField(max_length=10, null=True)
     title = models.CharField(max_length=100, null=True)
     profileHighlight = models.TextField(null=True)
-    resume = models.FileField(upload_to='media/', null=True)
+    resume = models.FileField(upload_to='settmedia/', null=True)
     headshot = models.ImageField(upload_to='media/', null=True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)

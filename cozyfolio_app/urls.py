@@ -1,5 +1,8 @@
 from django.urls import path     
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 
 urlpatterns = [
@@ -20,11 +23,8 @@ urlpatterns = [
     path('portfolioCreate', views.portfolioCreate),
     path('portfolioEdit/<int:id>', views.portfolioEdit),
     path('portfolioEdit/portfolioUpdate/<int:id>', views.portfolioUpdate),
-<<<<<<< HEAD
     path('portfolioEdit/assignProject/<int:val>',views.assignProject),
-=======
     path('pickPortfolio/<int:id>', views.pickPortfolio),
->>>>>>> 387c19d20edf5b30fef24280294ed6347ebcc3ca
     # path('portfolioSave/<int:id>', views.portfolioSave),
     path('projectCreate', views.projectCreate),
     path('projectNew', views.projectNew),
@@ -34,3 +34,6 @@ urlpatterns = [
     # path('websitePreview/<int:id>', views.websitePreview),
     # path('websiteCreate/<int:id>', views.websiteCreate),
 ]
+
+if settings:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

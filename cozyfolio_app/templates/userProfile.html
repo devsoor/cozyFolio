@@ -42,8 +42,8 @@
                     aria-controls="myInfo" aria-selected="true">My info</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="skills-tab" data-toggle="tab" href="#skills" role="tab"
-                    aria-controls="skills" aria-selected="false">Skills</a>
+                  <a class="nav-link" id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills"
+                    aria-selected="false">Skills</a>
                 </li>
 
               </ul>
@@ -102,7 +102,8 @@
                     <div class="col-md-2">
                       <label for="profileFormResume0">Resume</label>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
+                      <!-- {{pdfForm.as_p} -->
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="profileFormResume0">Upload</span>
@@ -116,11 +117,21 @@
                     </div>
                   </div>
 
+                  <!-- <form action="POST" enctype="multipart/form-data"> -->
+                  
+                    <!-- {{pdfForm -->
+                    <!-- <button>Submit</button> -->
+                  <!-- </form> -->
+                  <!-- <div>
+                    {{pdfForm.resume.url}}
+                    <a href={{pdfForm.resume.url}}">Download Resume</a>
+                  </div> -->
+
                   <div class="form-row mb-4">
                     <div class="col-md-2">
                       <label for="profileFormHeadshot0">Photo</label>
                     </div>
-                    <div class="col-md">
+                    <div class="col-md-6">
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="profileFormHeadshot0">Upload</span>
@@ -171,7 +182,7 @@
                 </div>
 
 
-                  <!-- Tab 2: Skills -->
+                <!-- Tab 2: Skills -->
                 <div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
                   <!-- Skills -->
                   <div class="form-row mb-3">
@@ -190,12 +201,9 @@
                   </div>
                 </div>
               </div>
-
-
-
-
               <div class="row justify-content-end">
-                <button class="btn btn-info" onclick="window.location.replace('/dashboard'); return false;" type="cancel">Cancel</button>
+                <button class="btn btn-info" onclick="window.location.replace('/dashboard'); return false;"
+                  type="cancel">Cancel</button>
                 <button class="btn btn-info" type="submit">Save</button>
               </div>
             </form>

@@ -50,7 +50,7 @@ def registerUser(request):
 
         request.session["firstName"] = registerFormFirstName
         request.session['userEmail'] = registerFormEmail
-        return redirect("/dashboard")
+        return redirect("/userProfile")
 
 def signin(request):
     return render(request, "login.html")
@@ -106,6 +106,7 @@ def convertStrToArray(obj):
     return arr
 
 def dashboard(request):
+    print('THIS FAR')
     this_user = User.objects.get(email=request.session['userEmail'])
 
     if this_user.skill.languages != None:
@@ -131,6 +132,9 @@ def dashboard(request):
     userPortfolios = this_user.portfolio.all()
     projects = Project.objects.all()
 
+    all_resumes = this_user.resume
+    print(all_resumes)
+    
     socialMedia = {"linkedin": "https://www.linkedin.com/in/devsoor/", "gitHub":"https://github.com/devsoor/PythonStack"}
     context = {
         "this_user": this_user,
@@ -141,6 +145,7 @@ def dashboard(request):
         "fwList": fwList,
         "dbList": dbList,
         "cloudList": cloudList,
+        'resumes': all_resumes
     }
     return render(request, "dashboard.html", context)
 
@@ -271,14 +276,18 @@ def userProfile(request):
     formFrameworks = FrameworksForm
     formDatabases = DatabasesForm
     formClouds = CloudsForm
-    # pdfForm = PDFForm()
+    pdfForm = PDFForm()
     this_user = User.objects.get(email=request.session['userEmail'])
+    all_res = this_user.resume
+    print("=============================================all_res",all_res)
     context = {
         "this_user": this_user,
         "formLanguages": formLanguages,
         "formFrameworks": formFrameworks,
         "formDatabases": formDatabases,
         "formClouds": formClouds,
+        'pdfForm':pdfForm,
+        'resumes': all_res,
     }
     return render(request, "userProfile.html", context)
 
@@ -324,11 +333,22 @@ def userCreate(request):
         formDatabases = DatabasesForm(request.POST)
         formClouds = CloudsForm(request.POST)
 
-        resumefile = request.FILES['profileFormResume']
+        uploaded_file = request.FILES['profileFormResume']
+        print("======================== uploaded file",uploaded_file)
         fs = FileSystemStorage()
-        resume_filename = fs.save(resumefile.name, resumefile)
-        this_user.resume = fs.url(resume_filename)
-        print("---------------> this_user.resume: ", this_user.resume)
+        name = fs.save(uploaded_file.name, uploaded_file)
+        this_user.resume = fs.url(name)
+        print("======================== this_user.resume file",this_user.resume)
+
+
+        # if request.method =='POST':
+        #     resumefile = request.FILES['profileFormResume']
+        #     fs = FileSystemStorage()
+        #     resume_filename = fs.save(resumefile.name, resumefile)
+        #     this_user.resume = fs.url(resume_filename)
+        #     print("------------")
+
+        # request.session['requestFiles'] = request.FILES
 
         headshotfile = request.FILES['profileFormHeadshot']
         fs = FileSystemStorage()

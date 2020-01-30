@@ -104,20 +104,12 @@
       <a href="#" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-user mr-3"></i>Portfolios</a>
       {% for folio in portfolios %}
-<<<<<<< HEAD
-      <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect" target="">{{folio.name}}</a>
-=======
-      <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect text-white" target="_blank">{{folio.name}}</a>
->>>>>>> 387c19d20edf5b30fef24280294ed6347ebcc3ca
+      <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect text-white" target="">{{folio.name}}</a>
       {% endfor %}
       <a href="#" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-table mr-3"></i>Projects</a>
       {% for proj in projects %}
-<<<<<<< HEAD
-      <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect" target="">{{proj.name}}</a>
-=======
-      <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect text-white" target="_blank">{{proj.name}}</a>
->>>>>>> 387c19d20edf5b30fef24280294ed6347ebcc3ca
+      <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect text-white" target="">{{proj.name}}</a>
       {% endfor %}
       <a href="#" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
@@ -219,23 +211,33 @@
           </div>
         </div>
 
-
         <div class="col-lg-4 col-md-12 text-center">
           <div class="card card-cascade wider mb-4 wow fadeIn">
             <div class="card-body card-body-cascade text-center">
               <div class="avatar mx-auto white"><img src="https://mdbootstrap.com/img/Photos/Others/men.jpg" alt=""
                   class=" img-fluid">
                 <h4 class="card-title font-weight-bold indigo-text pb-5"><strong>{{this_user.firstName}} {{this_user.lastName}}</strong></h4>
-
+                  <form action=""></form>
                 <div class="input-group">
-                  <div class="input-group-prepend">
+                  <!-- <div class="input-group-prepend">
                     <span class="input-group-text" id="portfolioFormResume">Upload</span>
-                  </div>
-                  <div class="custom-file">
+                  </div> -->
+                  <!-- <div class="custom-file">
                     <input type="file" class="custom-file-input" id="portfolioFormResume" name="portfolioFormResume"
                       aria-describedby="portfolioFormResume">
                     <label class="custom-file-label" for="portfolioFormResume">Upload resume</label>
-                  </div>
+                  </div> -->
+<!-- <=====================================================================================================================================================================> -->
+                    <div>
+                    <a href="/home/felix/Desktop/cozyFolio/cozyFolio/media/Felix_Almejo_2JKTvLR.pdf" target="_blank" download>Download Resume</a>
+                    <!-- {{resumes} -->
+                  </div> 
+                  <!-- <form action="POST" enctype="multipart/form-data"> 
+                    {% csrf_token %}
+                    {{pdfForm}}
+                    <input type="" value="{{pdfForm}}" id="profileFormResume" name="profileFormResume">
+                    <button>Submit</button> -->
+                  </form>
                 </div>
               </div>
             </div>
