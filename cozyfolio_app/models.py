@@ -107,6 +107,7 @@ class User(models.Model):
     title = models.CharField(max_length=100, null=True)
     profileHighlight = models.TextField(null=True)
     resume = models.FileField(upload_to='settmedia/', null=True)
+    tagLine = models.CharField(max_length=150, null=True)
     headshot = models.ImageField(upload_to='media/', null=True)
     created_at = models.DateField(default=datetime.now)
     updated_at = models.DateField(auto_now=True)

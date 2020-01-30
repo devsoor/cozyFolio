@@ -16,8 +16,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'cozyfolio_app/static/media/')
-print("========================> MEDIA_ROOT: ", MEDIA_ROOT)
-
 
 def index(request):
     return render(request, "index.html")
@@ -50,6 +48,7 @@ def registerUser(request):
 
         request.session["firstName"] = registerFormFirstName
         request.session['userEmail'] = registerFormEmail
+        request.session['pickPortfolioID'] = ""
         return redirect("/userProfile")
 
 def signin(request):
@@ -75,6 +74,7 @@ def login(request):
             if bcrypt.checkpw(loginFormPassword.encode(), logged_user.password.encode()):
                 request.session['userEmail'] = logged_user.email
                 request.session["firstName"] = logged_user.firstName
+                request.session['pickPortfolioID'] = ""
                 return redirect("/dashboard")
 
         messages.error(request, "Password does not match")
@@ -135,17 +135,29 @@ def dashboard(request):
     all_resumes = this_user.resume
     print(all_resumes)
     
-    socialMedia = {"linkedin": "https://www.linkedin.com/in/devsoor/", "gitHub":"https://github.com/devsoor/PythonStack"}
+    if request.session['pickPortfolioID']:
+        pickedPortfolio = Portfolio.objects.get(id=request.session['pickPortfolioID'])
+        pickedProjects = Project.objects.filter(portfolio=pickedPortfolio)
+
+    else:
+        pickedProjects = []
+
+    smLinkedIn = SocialMedia.objects.get(name="LinkedIn", user=this_user)
+    smGithub = SocialMedia.objects.get(name="GitHub", user=this_user)
+    smStackoverflow = SocialMedia.objects.get(name="Stack Overflow", user=this_user)
     context = {
         "this_user": this_user,
         "portfolios": userPortfolios,
         "projects": projects,
-        "socialMedia": socialMedia,
         "langList": langList,
         "fwList": fwList,
         "dbList": dbList,
         "cloudList": cloudList,
-        'resumes': all_resumes
+        'resumes': all_resumes,
+        "smLinkedIn": smLinkedIn,
+        "smGithub": smGithub,
+        "smStackoverflow":smStackoverflow,
+        "pickedProjects": pickedProjects,
     }
     return render(request, "dashboard.html", context)
 
@@ -153,14 +165,11 @@ def dashboard(request):
 # Portfolio functions==========================================================================================
 #
 def portfolioCreate(request):
-    print("portfolioCreate")
-    pprint.pprint(request.POST)
     newName  = request.POST['portfolioFormName']
     newTitle = request.POST['portfolioFormJobTitle']
     newSummary = request.POST['portfolioFormSummary']
     newResume = request.POST['portfolioFormResume']
     projList = request.POST.getlist('checks[]')
-    print(projList)
     newUser = User.objects.get(email = request.session['userEmail'])
     newPort = Portfolio.objects.create(name = newName, title = newTitle, portfolioSummary = newSummary, resume = newResume,user = newUser)
 
@@ -168,7 +177,6 @@ def portfolioCreate(request):
         if Project.objects.get(id = i) in newPort.project.all():
             continue
         newPort.project.add(Project.objects.get(id = i))
-    print(newPort.project.all())
     return redirect('/dashboard')
     
 def portfolioNew(request):
@@ -210,7 +218,6 @@ def portfolioUpdate(request,id):
         if Project.objects.get(id = i) in portToBeUpdated.project.all():
             continue
         portToBeUpdated.project.add(Project.objects.get(id = i))
-    print(portToBeUpdated.project.all())
     portToBeUpdated.name = updatedName
     portToBeUpdated.title = updatedTitle
     portToBeUpdated.portfolioSummary = updatedSummary
@@ -219,16 +226,13 @@ def portfolioUpdate(request,id):
     return redirect('/dashboard')
 
 def pickPortfolio(request, id):
-    this_portfolio = Portfolio.objects.get(id = id);
-    projects = Project.objects.filter(portfolio=this_portfolio)
+    request.session['pickPortfolioID'] = id
 
-    return render(request, "dashboard.html", {"projects": projects})
-
+    return redirect('/dashboard')
 #
 # Project functions=============================================================================================
 #
 def projectCreate(request):
-    pprint.pprint(request.POST)
     newName  = request.POST['projectFormName']
     newSummary = request.POST['projectFormSummary']
     newTech = request.POST['projectFormTech']
@@ -270,7 +274,7 @@ def projectEdit(request, id):
 # User functions
 #
 def userProfile(request):
-    #create arr of lang list create arr of social media, two methods initializing the two models
+    this_user = User.objects.get(email=request.session['userEmail'])
 
     formLanguages = LanguagesForm
     formFrameworks = FrameworksForm
@@ -280,6 +284,10 @@ def userProfile(request):
     this_user = User.objects.get(email=request.session['userEmail'])
     all_res = this_user.resume
     print("=============================================all_res",all_res)
+    smLinkedIn = SocialMedia.objects.get(name="LinkedIn", user=this_user)
+    smGithub = SocialMedia.objects.get(name="GitHub", user=this_user)
+    smStackoverflow = SocialMedia.objects.get(name="Stack Overflow", user=this_user)
+
     context = {
         "this_user": this_user,
         "formLanguages": formLanguages,
@@ -288,6 +296,9 @@ def userProfile(request):
         "formClouds": formClouds,
         'pdfForm':pdfForm,
         'resumes': all_res,
+        "smLinkedInUrl": smLinkedIn.url,
+        "smGithubUrl": smGithub.url,
+        "smStackoverflowUrl": smStackoverflow.url,
     }
     return render(request, "userProfile.html", context)
 
@@ -302,31 +313,31 @@ def userCreate(request):
     else:
         this_user = User.objects.get(email=request.session['userEmail'])
 
-        profileFormFirstName = request.POST["profileFormFirstName"]
-        profileFormLastName = request.POST["profileFormLastName"]
-        profileFormEmail = request.POST["profileFormEmail"]
-        profileFormTitle = request.POST["profileFormTitle"]
-        profileFormAddress = request.POST["profileFormAddress"]
-        country = request.POST["country"]
-        state = request.POST["state"]
-        city = request.POST["city"]
-        # profileFormResume = request.FILES["profileFormResume"]
-        # profileFormHeadshot = request.FILES["profileFormHeadshot"]
+        this_user.firstName = request.POST["profileFormFirstName"]
+        this_user.lastName = request.POST["profileFormLastName"]
+        this_user.email = request.POST["profileFormEmail"]
+        this_user.title = request.POST["profileFormTitle"]
+        this_user.tagLine = request.POST["profileFormTagline"]
+        this_user.address = request.POST["profileFormAddress"]
+        this_user.country = request.POST["country"]
+        this_user.state = request.POST["state"]
+        this_user.city = request.POST["city"]
+        this_user.profileHighlight = request.POST["profileHighlight"]
+
+
+        # get social media
         profileFormLinkedIn = request.POST["profileFormLinkedIn"]
         profileFormGithub = request.POST["profileFormGithub"]
         profileFormStackoverflow = request.POST["profileFormStackoverflow"]
-        profileHighlight = request.POST["profileHighlight"]
-
-        this_user.firstName = profileFormFirstName
-        this_user.lastName = profileFormLastName
-        this_user.email = profileFormEmail
-        this_user.title = profileFormTitle
-        this_user.address = profileFormAddress
-        this_user.country = country
-        this_user.state = state
-        this_user.city = city
-        this_user.profileHighlight = profileHighlight
-
+        smLinkedIn = SocialMedia.objects.get(name="LinkedIn", user=this_user)
+        smLinkedIn.url = profileFormLinkedIn
+        smLinkedIn.save()
+        smGithub = SocialMedia.objects.get(name="GitHub", user=this_user)
+        smGithub.url = profileFormGithub
+        smGithub.save()
+        smStackoverflow = SocialMedia.objects.get(name="Stack Overflow", user=this_user)
+        smStackoverflow.url = profileFormStackoverflow
+        smStackoverflow.save()
 
         formLanguages = LanguagesForm(request.POST)
         formFrameworks = FrameworksForm(request.POST)
@@ -354,7 +365,6 @@ def userCreate(request):
         fs = FileSystemStorage()
         headshot_filename = fs.save(headshotfile.name, headshotfile)
         this_user.headshot = fs.url(headshot_filename)
-        print("---------------> this_user.headshot: ", this_user.headshot)
 
         if formLanguages.is_valid():
             languages = formLanguages.cleaned_data.get('languages')
@@ -383,20 +393,61 @@ def userCreate(request):
         skill.clouds = clouds
         skill.save()
 
-        # get social media
-        smLinkedIn = SocialMedia.objects.get(name="LinkedIn", user=this_user)
-        smLinkedIn.url = profileFormLinkedIn
-        smLinkedIn.save()
-        smGithub = SocialMedia.objects.get(name="GitHub", user=this_user)
-        smGithub.url = profileFormGithub
-        smGithub.save()
-        smStackoverflow = SocialMedia.objects.get(name="Stack Overflow", user=this_user)
-
-        smStackoverflow.url = profileFormStackoverflow
-        smStackoverflow.save()
-
         this_user.save()
-        request.session["firstName"] = profileFormFirstName
-        request.session['userEmail'] = profileFormEmail
+        request.session["firstName"] = this_user.firstName
+        request.session['userEmail'] = this_user.email
 
         return redirect("/dashboard")
+
+
+#
+# Website stuff
+#
+def websitePreview(request):
+    user = User.objects.get(email=request.session['userEmail'])
+    portfolios = Portfolio.objects.all()
+    projects = Project.objects.all()
+    skills = Skill.objects.all()
+
+    context = {
+        "user": user,
+        "portfolios": portfolios,
+        "projects": projects,
+        "skills": skills,
+    }
+    return render(request, "websitePreview.html", context)
+
+def websiteCreate(request):
+    this_user = User.objects.get(email=request.session['userEmail'])
+    portfolios = Portfolio.objects.all()
+    projects = Project.objects.all()
+    if this_user.skill.languages != None:
+        langList = convertStrToArray(this_user.skill.languages) 
+    else:
+        langList = []
+
+    if this_user.skill.frameworks != None:
+        fwList = convertStrToArray(this_user.skill.frameworks)
+    else:
+        fwList = []
+
+    if this_user.skill.databases != None:
+        dbList = convertStrToArray(this_user.skill.databases)
+    else:
+        dbList = []
+
+    if this_user.skill.clouds != None:    
+        cloudList = convertStrToArray(this_user.skill.clouds)
+    else:
+        cloudList = []
+
+    context = {
+        "this_user": this_user,
+        "portfolios": portfolios,
+        "projects": projects,
+        "languages": langList,
+        "fwList": fwList,
+        "dbList": dbList,
+        "cloudList": cloudList,
+    }
+    return render(request, "websiteCreate.html", context)

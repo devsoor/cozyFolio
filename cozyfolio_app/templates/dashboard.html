@@ -57,8 +57,8 @@
               Website
             </a>
             <div class="dropdown-menu dropdown-mfenu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <a class="dropdown-item" href="#">Preview</a>
-              <a class="dropdown-item" href="#">Create</a>
+              <a class="dropdown-item" href="websitePreview">Preview</a>
+              <a class="dropdown-item" href="websiteCreate">Create</a>
             </div>
           </li>
         </ul>
@@ -258,36 +258,39 @@
                         Portfolios
                       </a>
                       {% for folio in portfolios %}
-                          <a href="pickPortfolio{{folio.id}}" class="list-group-item list-group-item-action">{{folio.name}}</a>
+                          <a href="pickPortfolio/{{folio.id}}" class="list-group-item list-group-item-action">{{folio.name}}</a>
                       {% endfor %}
                     </div>
                   </div>
                   <div class="col-lg-9">
-                    {% for proj in projects %}
-                    <div class="col-lg-4 col-md-12">
-                      <div class="card card-cascade wider mb-4 wow fadeIn">
-                        <!--Card image-->
-                        <div class="view view-cascade overlay">
-                          <img src="{{proj.picImage}}" class="card-img-top"
-                            alt="wider">
-          
-                        </div>
-                        <!--/Card image-->
-          
-                        <!--Card content-->
-                        <div class="card-body card-body-cascade text-center">
-                              <!--Title-->
-                              <h5 class="indigo-text"><strong>{{proj.name}}</strong></h5>
-                      
-                              <p class="card-text">{{proj.summary}} </p>
-                              <form action="/projectEdit/{{proj.id}}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
-                              </form>
+                    <div class="row">
+                      {% for proj in pickedProjects %}
+                      <div class="col-lg-4 col-md-12">
+                        <div class="card card-cascade wider mb-4 wow fadeIn">
+                          <!--Card image-->
+                          <div class="view view-cascade overlay">
+                            <img src="{{proj.picImage}}" class="card-img-top"
+                              alt="wider">
+            
+                          </div>
+                          <!--/Card image-->
+            
+                          <!--Card content-->
+                          <div class="card-body card-body-cascade text-center">
+                                <!--Title-->
+                                <h5 class="indigo-text"><strong>{{proj.name}}</strong></h5>
+                        
+                                <p class="card-text">{{proj.summary}} </p>
+                                <form action="/projectEdit/{{proj.id}}" method="post">
+                                  {% csrf_token %}
+                                  <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
+                                </form>
+                          </div> 
                         </div> 
-                      </div> 
+                      </div>
+                    {% endfor %}  
                     </div>
-                  {% endfor %}                 
+                          
                  </div>
                 </div>
                   
@@ -308,15 +311,13 @@
                   <!--Email-->
                   <a class="btn-floating btn-lg btn-email" type="button" role="button"><i
                       class="fas fa-envelope"></i></a>
-                  <a class="btn-floating btn-lg btn-li" type="button" role="button"><i
+                  <a href="{{smLinkedIn}}" class="btn-floating btn-lg btn-li" type="button" role="button"><i
                       class="fab fa-linkedin-in"></i></a>
                   <!--Stack Overflow-->
-                  <a class="btn-floating btn-lg btn-so" type="button" role="button"><i
+                  <a href="{{smStackoverflow}}" class="btn-floating btn-lg btn-so" type="button" role="button"><i
                       class="fab fa-stack-overflow"></i></a>
-                  <!--Youtube-->
-                  <a class="btn-floating btn-lg btn-yt" type="button" role="button"><i class="fab fa-youtube"></i></a>
-                  <!--Github-->
-                  <a class="btn-floating btn-lg btn-git" type="button" role="button"><i class="fab fa-github"></i></a>
+                  <a href="{{smGithub}}" class="btn-floating btn-lg btn-so" type="button" role="button"><i
+                    class="fab fa-github"></i></a>
                 </div>
               </div>
             </div>

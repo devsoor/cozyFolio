@@ -31,8 +31,8 @@ urlpatterns = [
     path('projectEdit/<int:id>', views.projectEdit),
     path('projectEdit/projectUpdate/<int:id>', views.projectUpdate),
     # path('projectSave/<int:id>', views.projectSave),
-    # path('websitePreview/<int:id>', views.websitePreview),
-    # path('websiteCreate/<int:id>', views.websiteCreate),
+    path('websitePreview', views.websitePreview),
+    path('websiteCreate', views.websiteCreate),
 ]
 
 if settings:
