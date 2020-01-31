@@ -27,7 +27,7 @@
           <div class="card-body card-body-cascade text-left">
             <form action="projectUpdate/{{project.id}}" method="post" class="p-5">
               {% csrf_token %}
-              <p class="h4 mb-4">Editing Project...</p>
+              <p class="h4 mb-4">Project Information</p>
               <label for="projectFormName">Project Name</label>
               <input type="text" id="projectFormName" value="{{project.name}}" name="projectFormName" class="form-control mb-4">
               <div class="form-row mb-4">
