@@ -28,22 +28,20 @@
   {% block content %}
   <div class="container-fluid">
     <div class="row wow fadeIn">
-      <div class="col-lg-8 col-md-12">
+      <div class="col-lg-4 col-md-6">
         <div class="card card-cascade wider mb-4 wow fadeIn">
           <div class="card-body card-body-cascade text-left">
             <p class="h4 mb-4">Job Statistic</p>
             <label for="numbofJobApplied">Number of the jobs applied: </label>
-            <input disabled type="text" id="numbofJobApplied" name="numbofJobApplied" class="form-control mb-4">
+            <input disabled type="text" id="numbofJobApplied" name="numbofJobApplied" value="{{numbofJobApplied}}" class="form-control mb-4">
             <label for="numbofCompanyApplied">Number of the companies applied: </label>
-            <input disabled type="text" id="numbofCompanyApplied" name="numbofCompanyApplied" class="form-control mb-4">
-            <label for="averageRespond">Average respond: </label>
-            <input disabled type="text" id="averageRespond" name="averageRespond" class="form-control mb-4">
+            <input disabled type="text" id="numbofCompanyApplied" name="numbofCompanyApplied" value="{{numbofCompanyApplied}}" class="form-control mb-4">
+            <label for="averageRespond">Number of responses: </label>
+            <input disabled type="text" id="averageRespond" name="averageRespond" value="{{response}}" class="form-control mb-4">
             <label for="offerReceived"> Offers received: </label>
-            <input disabled type="text" id="offerReceived" name="offerReceived" class="form-control mb-4">
+            <input disabled type="text" id="offerReceived" name="offerReceived" value="{{offerReceived}}" class="form-control mb-4">
             <label for="offerReject"> Offers rejected: </label>
-            <input disabled type="text" id="offerReject" name="offerReject" class="form-control mb-4">
-            <label for="mostPopularPortfolio"> Most popular portfolio : </label>
-            <input disabled type="text" id="mostPopularPortfolio" name="mostPopularPortfolio" class="form-control mb-4">
+            <input disabled type="text" id="offerReject" name="offerReject" value="{{offerReject}}" class="form-control mb-4">
             <div class="row justify-content-end">
               <a href="/dashboard"><button class="btn btn-info" type="submit">Go Back</button></a> 
             </div>

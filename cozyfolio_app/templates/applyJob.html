@@ -42,29 +42,51 @@
               <input type="date" id="JobFormforapplyDate" name="JobFormforapplyDate" class="form-control mb-4">
               <label for="JobFormforrespondDate"> Date of the first response: </label>
               <input type="date" id="JobFormforrespondDate" name="JobFormforrespondDate" class="form-control mb-4">
-              <label for="JobFormforresponse"> Received response? </label>
-              <select name="JobFormforresponse" id="JobFormforresponse">
-                  <option value=1>Yes</option>
-                  <option value=0>No</option>
-              </select><br>
-              <label for="jobFormforoffer"> Received offer? </label>
-              <select name="jobFormforoffer" id="jobFormforoffer">
-                  <option value=1>Yes</option>
-                  <option value=0>No</option>
-              </select><br>
-              <label for="jobFormforreject"> Offer rejected? </label>
-              <select name="jobFormforreject" id="jobFormforreject">
-                  <option value=1>Yes</option>
-                  <option value=0>No</option>
-              </select><br>
+
+
+              <div class="form-group row">
+                <label for="JobFormforresponse" class="col-sm-3 col-form-label">Received response?</label>
+                <div class="col-sm-8">
+                  <select name="JobFormforresponse" id="JobFormforresponse">
+                    <option value=1>Yes</option>
+                    <option value=0>No</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="jobFormforoffer" class="col-sm-3 col-form-label">Received offer?</label>
+                <div class="col-sm-8">
+                  <select name="jobFormforoffer" id="jobFormforoffer">
+                    <option value=1>Yes</option>
+                    <option value=0>No</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="jobFormforreject" class="col-sm-3 col-form-label">Offer rejected?</label>
+                <div class="col-sm-8">
+                  <select name="jobFormforreject" id="jobFormforreject">
+                    <option value=1>Yes</option>
+                    <option value=0>No</option>
+                  </select>
+                </div>
+              </div>
+
               <label for="JobFormforestSalary"> Estimated Salary $: </label>
-              <input type="number" id="JobFormforestSalary" name="JobFormforestSalary" class="form-control mb-4">
-              <label for="JobFormforportfolio">Choose a portfolio </label>
-              <select name="JobFormforportfolio" id="JobFormforportfolio">
-                {% for portfolio in allPortfolios %}    
+              <input type="number" min="0" max="1000000" step="500" id="JobFormforestSalary" name="JobFormforestSalary" class="form-control mb-4">
+
+              <div class="form-group row">
+                <label for="JobFormforportfolio" class="col-sm-3 col-form-label">Choose a portfolio</label>
+                <div class="col-sm-8">
+                  <select name="JobFormforportfolio" id="JobFormforportfolio">
+                    {% for portfolio in allPortfolios %}
                     <option value="{{portfolio.id}}">{{portfolio.name}}</option>
-                {% endfor %}
-              </select>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
 
               <div class="row justify-content-end">
                 <button class="btn btn-info" type="cancel">Cancel</button>

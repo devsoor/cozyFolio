@@ -12,6 +12,7 @@ import json
 import ast
 import urllib.parse
 import os
+from datetime import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -131,6 +132,7 @@ def dashboard(request):
        
     userPortfolios = this_user.portfolio.all()
     projects = Project.objects.all()
+    jobs = Job.objects.all()
 
     all_resumes = this_user.resume
     print(all_resumes)
@@ -145,10 +147,12 @@ def dashboard(request):
     smLinkedIn = SocialMedia.objects.get(name="LinkedIn", user=this_user)
     smGithub = SocialMedia.objects.get(name="GitHub", user=this_user)
     smStackoverflow = SocialMedia.objects.get(name="Stack Overflow", user=this_user)
+
     context = {
         "this_user": this_user,
         "portfolios": userPortfolios,
         "projects": projects,
+        "jobs": jobs,
         "langList": langList,
         "fwList": fwList,
         "dbList": dbList,
@@ -455,13 +459,13 @@ def websiteCreate(request):
 def applyJob(request):
     allPortfolios = Portfolio.objects.all()
     context = {
-        "allPortfolios":allPortfolios
+        "allPortfolios":allPortfolios,
     }
     return render(request, "applyJob.html", context)
 
 def viewJob(request):
-    # print("########################", request.POST)
     this_user = User.objects.get(email=request.session['userEmail'])
+    print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  request.POST['JobFormforportfolio']", request.POST['JobFormforportfolio'])
 
     errors = Job.objects.job_validator(request.POST)
     if len(errors) > 0:
@@ -480,68 +484,73 @@ def viewJob(request):
     offerReceived = request.POST['jobFormforoffer']
     thisPortfolio = Portfolio.objects.get(id=portfolioId)
 
-    # job = Job.objects.filter(jobTitle=title)
-    # if len(job)==0:
-    #     job = Job.objects.create(jobTitle=title, company=company, applyDate=applyDate, respondDate=respondDate, response=response, estSalary=estSalary, portfolio=thisPortfolio, user=this_user, offerReject=offerReject,numbofJobApplied=1, offerReceived=offerReceived, )
-    # else:
-    #     job = Job.objects.get(jobTitle=title)
-
-    #     numbofJobApplied = 1
-    # else:
-    #     numbofJobApplied += 1
-
-    # countcompany = Job.objects.filter(company=company)
-    # if len(countcompany) == 0:
-    #     numbofCompanyApplied =1
-    # else:
-    #     numbofCompanyApplied +=1
-
-    # countresponse = Job.objects.filter(response=response)
-    # if len(countresponse) == 0:
-    #     numbofCompanyApplied =1
-    # else:
-    #     numbofCompanyApplied +=1
-    # if respondDate == None:
-    #     newJob = Job.objects.create(jobTitle=title, company=company, applyDate=applyDate, response=response, estSalary=estSalary, portfolio=thisPortfolio, user=this_user, offerReject=offerReject, offerReceived=offerReceived)
-    # else:
     newJob = Job.objects.create(jobTitle=title, company=company, applyDate=applyDate, respondDate=respondDate, response=response, estSalary=estSalary, portfolio=thisPortfolio, user=this_user, offerReject=offerReject, offerReceived=offerReceived)
-    # print("##############################", newJob)
     return redirect("/dashboard")
 
 def updateJob(request,id):
-    thisJob = Job.objects.get(id=id)
+    this_job = Job.objects.get(id=id)
     allPortfolios = Portfolio.objects.all()
+
+    responseDate = datetime.strftime(this_job.respondDate, "%Y-%m-%d")
+    appliedDate = datetime.strftime(this_job.applyDate, "%Y-%m-%d")
+
     context ={
-        "thisJob" : thisJob,
-        "allPortfolios":allPortfolios
+        "this_job" : this_job,
+        "allPortfolios": allPortfolios,
+        "responseDate": responseDate,
+        "appliedDate": appliedDate,
     }
     return render(request,"updateJob.html", context)
 
 
 def newJob(request,id):
-    print("request.POST=", request.POST)
     this_user = User.objects.get(email=request.session['userEmail'])
-    editjob = Job.objects.get(id=id)
+    this_job = Job.objects.get(id=id)
 
-    editjob.jobTitle = request.POST['JobFormtitle']
-    editjob.company = request.POST['JobFormCompanyName']
-    editjob.applyDate = request.POST['JobFormforapplyDate']
-    editjob.respondDate = request.POST['JobFormforrespondDate']
-    editjob.response = request.POST['JobFormforresponse']
-    editjob.estSalary = request.POST['JobFormforestSalary']
-    editjob.portfolioId = request.POST['JobFormforportfolio']
-    editjob.offerReject = request.POST['jobFormforreject']
-    editjob.offerReceived = request.POST['jobFormforoffer']
-    editjob.thisPortfolio = Portfolio.objects.get(id=portfolioId)
+    this_job.jobTitle = request.POST['JobFormtitle']
+    this_job.company = request.POST['JobFormCompanyName']
+    this_job.applyDate = request.POST['JobFormforapplyDate']
+    this_job.respondDate = request.POST['JobFormforrespondDate']
+    this_job.response = request.POST['JobFormforresponse']
+    this_job.estSalary = request.POST['JobFormforestSalary']
+    this_job.offerReject = request.POST['jobFormforreject']
+    this_job.offerReceived = request.POST['jobFormforoffer']
+    this_job.portfolio = Portfolio.objects.get(id=request.POST['JobFormforportfolio'])
 
-    editjob.save()
+    this_job.save()
 
     return redirect("/dashboard")
 
 def jobStatistic(request):
-    thisJob = Job.objects.all()
+    this_user = User.objects.get(email=request.session['userEmail'])
+    this_job = Job.objects.all()
+    numbofJobApplied = this_job.count()
+
+    clist = Job.objects.order_by('company')
+    companyList = []
+    for c in clist:
+        companyList.append(c.company)
+
+    numbofCompanyApplied = len(set(companyList))
+
+    offerReceived = len(Job.objects.filter(offerReceived=1))
+    print("offerReceived", offerReceived)
+
+    offerReject = len(Job.objects.filter(offerReject=1))
+    print("offerReject", offerReject)
+
+
+    response = len(Job.objects.filter(response=1))
+    print("response", response)
+
+
     context ={
-        "thisJob" : thisJob,
+        "this_job" : this_job,
+        "numbofJobApplied": numbofJobApplied,
+        "numbofCompanyApplied": numbofCompanyApplied,
+        "offerReceived": offerReceived,
+        "offerReject": offerReject,
+        "response": response,
     }
 
     return render(request,"jobStatistic.html", context)

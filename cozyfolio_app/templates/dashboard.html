@@ -47,10 +47,11 @@
             </a>
             <div class="dropdown-menu dropdown-mfenu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
               <a class="dropdown-item" href="/portfolioNew">New Portfolio...</a>
-              <a class="dropdown-item" href="/projectNew">New Project..</a>
+              <a class="dropdown-item" href="/projectNew">New Project...</a>
+              <a class="dropdown-item" href="/applyJob">New Job...</a>
             </div>
           </li>
-         
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
@@ -104,17 +105,21 @@
       <a href="#" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-user mr-3"></i>Portfolios</a>
       {% for folio in portfolios %}
-      <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect text-white" target="">{{folio.name}}</a>
+          <a href="/portfolioEdit/{{folio.id}}" class="nav-link waves-effect text-white" target="">{{folio.name}}</a>
       {% endfor %}
       <a href="#" class="list-group-item list-group-item-action waves-effect">
-        <i class="fas fa-table mr-3"></i>Projects</a>
+          <i class="fas fa-table mr-3"></i>Projects</a>
       {% for proj in projects %}
-      <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect text-white" target="">{{proj.name}}</a>
+          <a href="/projectEdit/{{proj.id}}" class="nav-link waves-effect text-white" target="">{{proj.name}}</a>
       {% endfor %}
-      <a href="#" class="list-group-item list-group-item-action waves-effect">
+      <a href="applyJob" class="list-group-item list-group-item-action waves-effect">
+        <i class="fas fa-business-time mr-3"></i>Job Tracker</a>
+      {% for job in jobs %}
+        <a href="/updateJob/{{job.id}}" class="nav-link waves-effect text-white" target="">{{job.jobTitle}} ({{job.company}}</a>
+      {% endfor %}
+      <a href="jobStatistic" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
-      <a href="#" class="list-group-item list-group-item-action waves-effect">
-        <i class="fas fa-cog mr-3"></i>Settings</a>
+
     </div>
     {% endblock %}
   </div>
@@ -131,81 +136,89 @@
             <div class="card-body card-body-cascade text-left">
               <div class="form-group">
 
-              <div class="card text-white bg-info mb-3">
-                <!-- <div class="card-header">About Me</div> -->
-                <div class="card-body">
-                  <h5 class="card-title">About Me</h5>
-                  <p class="card-text text-white">{{this_user.profileHighlight}}</p>
+                <div class="card text-white bg-info mb-3">
+                  <!-- <div class="card-header">About Me</div> -->
+                  <div class="card-body">
+                    <h5 class="card-title">About Me</h5>
+                    <p class="card-text text-white">{{this_user.profileHighlight}}</p>
+                  </div>
                 </div>
-              </div>
               </div>
               <!-- <hr> -->
               <!-- <div class="card mb-3"> -->
-                  <div class="row">
-                        <div class="col-lg-3 col-md-12">
-                          <div class="card-body text-white #e65100 orange darken-4">
+              <div class="row">
+                <div class="col-lg-3 col-md-12">
+                  <div class="card-body text-white #e65100 orange darken-4">
 
-                          <table id="tableLanguages">
-                            <tr>
-                              <th><h5>Languages </h5></th>
-                            </tr>
-                            {% for lang in langList %}
-                            <tr>
-                              <td>{{lang}}</td> 
-                            </tr>
-                            {% endfor %}
-                          </table>
-                        </div>
-                    </div>
-
-                          <div class="col-lg-3 col-md-12">
-                            <div class="card-body text-white bg-primary">
-
-                            <table id="tableFrameworks">
-                              <tr>
-                                <th><h5>Frameworks</h5></th>
-                              </tr>
-                              {% for fw in fwList %}
-                              <tr>
-                                <td>{{fw}}</td>
-                              </tr>
-                              {% endfor %}
-                            </table>
-                          </div>
-                    </div>
-
-                        <div class="col-lg-3 col-md-12">
-                          <div class="card-body text-white secondary-color">
-
-                          <table id="tableDatabases">
-                            <tr>
-                              <th><h5>Databases</h5></th>
-                            </tr>
-                            {% for db in dbList %}
-                            <tr>
-                              <td>{{db}}</td>
-                            </tr>
-                            {% endfor %}
-                          </table>
-                        </div>
-                    </div>
-
-                        <div class="col-lg-3 col-md-12">
-                          <div class="card-body text-white default-color-dark">
-
-                          <table id="tableClouds">
-                            <tr>
-                              <th><h5>Cloud</h5></th>
-                            </tr>
-                            {% for cloud in cloudList %}
-                            <tr>
-                              <td>{{cloud}}</td>
-                            </tr>
-                            {% endfor %}
-                          </table>
-                        </div>
-                    </div>
+                    <table id="tableLanguages">
+                      <tr>
+                        <th>
+                          <h5>Languages </h5>
+                        </th>
+                      </tr>
+                      {% for lang in langList %}
+                      <tr>
+                        <td>{{lang}}</td>
+                      </tr>
+                      {% endfor %}
+                    </table>
                   </div>
+                </div>
+
+                <div class="col-lg-3 col-md-12">
+                  <div class="card-body text-white bg-primary">
+
+                    <table id="tableFrameworks">
+                      <tr>
+                        <th>
+                          <h5>Frameworks</h5>
+                        </th>
+                      </tr>
+                      {% for fw in fwList %}
+                      <tr>
+                        <td>{{fw}}</td>
+                      </tr>
+                      {% endfor %}
+                    </table>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-12">
+                  <div class="card-body text-white secondary-color">
+
+                    <table id="tableDatabases">
+                      <tr>
+                        <th>
+                          <h5>Databases</h5>
+                        </th>
+                      </tr>
+                      {% for db in dbList %}
+                      <tr>
+                        <td>{{db}}</td>
+                      </tr>
+                      {% endfor %}
+                    </table>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-12">
+                  <div class="card-body text-white default-color-dark">
+
+                    <table id="tableClouds">
+                      <tr>
+                        <th>
+                          <h5>Cloud</h5>
+                        </th>
+                      </tr>
+                      {% for cloud in cloudList %}
+                      <tr>
+                        <td>{{cloud}}</td>
+                      </tr>
+                      {% endfor %}
+                    </table>
+                  </div>
+                </div>
+              </div>
               <!-- </div> -->
             </div>
           </div>
@@ -216,8 +229,9 @@
             <div class="card-body card-body-cascade text-center">
               <div class="avatar mx-auto white"><img src="https://mdbootstrap.com/img/Photos/Others/men.jpg" alt=""
                   class=" img-fluid">
-                <h4 class="card-title font-weight-bold indigo-text pb-5"><strong>{{this_user.firstName}} {{this_user.lastName}}</strong></h4>
-                  <form action=""></form>
+                <h4 class="card-title font-weight-bold indigo-text pb-5"><strong>{{this_user.firstName}}
+                    {{this_user.lastName}}</strong></h4>
+                <form action=""></form>
                 <div class="input-group">
                   <!-- <div class="input-group-prepend">
                     <span class="input-group-text" id="portfolioFormResume">Upload</span>
@@ -227,11 +241,12 @@
                       aria-describedby="portfolioFormResume">
                     <label class="custom-file-label" for="portfolioFormResume">Upload resume</label>
                   </div> -->
-<!-- <=====================================================================================================================================================================> -->
-                    <div>
-                    <a href="/home/felix/Desktop/cozyFolio/cozyFolio/media/Felix_Almejo_2JKTvLR.pdf" target="_blank" download>Download Resume</a>
+                  <!-- <=====================================================================================================================================================================> -->
+                  <div>
+                    <a href="/home/felix/Desktop/cozyFolio/cozyFolio/media/Felix_Almejo_2JKTvLR.pdf" target="_blank"
+                      download>Download Resume</a>
                     <!-- {{resumes} -->
-                  </div> 
+                  </div>
                   <!-- <form action="POST" enctype="multipart/form-data"> 
                     {% csrf_token %}
                     {{pdfForm}}
@@ -246,59 +261,85 @@
       </div>
 
       <div class="row wow fadeIn">
-          <div class="col-lg-12 col-md-12">
-              <div class="card card-cascade wider mb-4 wow fadeIn">
-                <div class="card-body card-body-cascade text-left">
-                  <div class="row wow fadeIn">
-
-
-                  <div class="col-lg-3">
-                    <div class="list-group">
-                      <a href="#!" class="list-group-item list-group-item-action active">
-                        Portfolios
-                      </a>
-                      {% for folio in portfolios %}
-                          <a href="pickPortfolio/{{folio.id}}" class="list-group-item list-group-item-action">{{folio.name}}</a>
-                      {% endfor %}
-                    </div>
+        <div class="col-lg-12 col-md-12">
+          <div class="card card-cascade wider mb-4 wow fadeIn">
+            <div class="card-body card-body-cascade text-left">
+              <div class="row wow fadeIn">
+                <div class="col-lg-3">
+                  <div class="list-group">
+                    <a href="#!" class="list-group-item list-group-item-action active">
+                      Portfolios
+                    </a>
+                    {% for folio in portfolios %}
+                    <a href="pickPortfolio/{{folio.id}}"
+                      class="list-group-item list-group-item-action">{{folio.name}}</a>
+                    {% endfor %}
                   </div>
-                  <div class="col-lg-9">
-                    <div class="row">
-                      {% for proj in pickedProjects %}
-                      <div class="col-lg-4 col-md-12">
-                        <div class="card card-cascade wider mb-4 wow fadeIn">
-                          <!--Card image-->
-                          <div class="view view-cascade overlay">
-                            <img src="{{proj.picImage}}" class="card-img-top"
-                              alt="wider">
-            
-                          </div>
-                          <!--/Card image-->
-            
-                          <!--Card content-->
-                          <div class="card-body card-body-cascade text-center">
-                                <!--Title-->
-                                <h5 class="indigo-text"><strong>{{proj.name}}</strong></h5>
-                        
-                                <p class="card-text">{{proj.summary}} </p>
-                                <form action="/projectEdit/{{proj.id}}" method="post">
-                                  {% csrf_token %}
-                                  <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
-                                </form>
-                          </div> 
-                        </div> 
+                </div>
+                <div class="col-lg-9">
+                  <div class="row">
+                    {% for proj in pickedProjects %}
+                    <div class="col-lg-4 col-md-12">
+                      <div class="card card-cascade wider mb-4 wow fadeIn">
+                        <!--Card image-->
+                        <div class="view view-cascade overlay">
+                          <img src="{{proj.picImage}}" class="card-img-top" alt="wider">
+
+                        </div>
+                        <!--/Card image-->
+
+                        <!--Card content-->
+                        <div class="card-body card-body-cascade text-center">
+                          <!--Title-->
+                          <h5 class="indigo-text"><strong>{{proj.name}}</strong></h5>
+
+                          <p class="card-text">{{proj.summary}} </p>
+                          <form action="/projectEdit/{{proj.id}}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
+                          </form>
+                        </div>
                       </div>
-                    {% endfor %}  
                     </div>
-                          
-                 </div>
+                    {% endfor %}
+                  </div>
                 </div>
-                  
-           
-                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div> 
+      </div>
+
+      <div class="row wow fadeIn">
+        <div class="col-lg-12 col-md-12">
+          <div class="card card-cascade wider mb-4 wow fadeIn">
+            <div class="card-body card-body-cascade text-left">
+              <table class="table table-striped table-bordered ">
+                <thead class="stylish-color white-text">
+                  <tr>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Application Date</th>
+                    <th scope="col">Portfolio</th>
+                    <th scope="col">Est. Salary</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for job in jobs %}
+                  <tr>
+                    <td>{{job.jobTitle}}</td>
+                    <td>{{job.company}}</td>
+                    <td>{{job.applyDate}}</td>
+                    <td>{{job.portfolio.name}}</td>
+                    <td>{{job.estSalary}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="row wow fadeIn">
         <div class="col-md-12">
@@ -317,7 +358,7 @@
                   <a href="{{smStackoverflow}}" class="btn-floating btn-lg btn-so" type="button" role="button"><i
                       class="fab fa-stack-overflow"></i></a>
                   <a href="{{smGithub}}" class="btn-floating btn-lg btn-so" type="button" role="button"><i
-                    class="fab fa-github"></i></a>
+                      class="fab fa-github"></i></a>
                 </div>
               </div>
             </div>
