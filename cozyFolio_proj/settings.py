@@ -74,9 +74,7 @@ WSGI_APPLICATION = 'cozyFolio_proj.wsgi.application'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-print("==============================================================>>>>>>>> MEDIA_ROOT", MEDIA_ROOT)
-print("==============================================================>>>>>>>> BASE_DIR", BASE_DIR)
-print("================================MEDIA URL Is =",MEDIA_URL)
+
 
 
 # Database

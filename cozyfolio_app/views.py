@@ -91,7 +91,6 @@ def logout(request):
     try:
         request.session.clear()
     except KeyError:
-        print("Exception: ")
         pass
     return redirect("/")
 
@@ -113,7 +112,7 @@ def convertStrToArray(obj):
     return arr
 
 def dashboard(request):
-    print('THIS FAR')
+    
     this_user = User.objects.get(email=request.session['userEmail'])
 
     if this_user.skill.languages != None:
@@ -145,9 +144,7 @@ def dashboard(request):
     else:
         pdfForm = PDFForm()
 
-    all_resumes = this_user.resume
-    print(all_resumes)
-    
+    all_resumes = this_user.resume    
     if request.session['pickPortfolioID']:
         pickedPortfolio = Portfolio.objects.get(id=request.session['pickPortfolioID'])
         pickedProjects = Project.objects.filter(portfolio=pickedPortfolio)
@@ -298,7 +295,6 @@ def userProfile(request):
     pdfForm = PDFForm(request.POST, request.FILES)
     this_user = User.objects.get(email=request.session['userEmail'])
     all_res = this_user.resume
-    print("=============================================all_res",all_res)
     smLinkedIn = SocialMedia.objects.get(name="LinkedIn", user=this_user)
     smGithub = SocialMedia.objects.get(name="GitHub", user=this_user)
     smStackoverflow = SocialMedia.objects.get(name="Stack Overflow", user=this_user)
@@ -359,31 +355,14 @@ def userCreate(request):
         formDatabases = DatabasesForm(request.POST)
         formClouds = CloudsForm(request.POST)
 
-        # uploaded_file = request.FILES['profileFormResume']
-        # print("======================== uploaded file",uploaded_file)
-        # fs = FileSystemStorage()
-        # name = fs.save(uploaded_file.name, uploaded_file)
-        # this_user.resume = fs.url(name)
-        # print("======================== this_user.resume file",this_user.resume)
+
 
         pdfForm = PDFForm(request.POST, request.FILES)
         if pdfForm.is_valid():
             pdfForm.save()
         else:
             pdfForm = PDFForm()
-        # if request.method =='POST':
-        #     resumefile = request.FILES['profileFormResume']
-        #     fs = FileSystemStorage()
-        #     resume_filename = fs.save(resumefile.name, resumefile)
-        #     this_user.resume = fs.url(resume_filename)
-        #     print("------------")
 
-        # request.session['requestFiles'] = request.FILES
-
-        # headshotfile = request.FILES['profileFormHeadshot']
-        # fs = FileSystemStorage()
-        # headshot_filename = fs.save(headshotfile.name, headshotfile)
-        # this_user.headshot = fs.url(headshot_filename)
 
         if formLanguages.is_valid():
             languages = formLanguages.cleaned_data.get('languages')
@@ -480,7 +459,6 @@ def applyJob(request):
 
 def viewJob(request):
     this_user = User.objects.get(email=request.session['userEmail'])
-    print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  request.POST['JobFormforportfolio']", request.POST['JobFormforportfolio'])
 
     errors = Job.objects.job_validator(request.POST)
     if len(errors) > 0:
@@ -549,14 +527,11 @@ def jobStatistic(request):
     numbofCompanyApplied = len(set(companyList))
 
     offerReceived = len(Job.objects.filter(offerReceived=1))
-    print("offerReceived", offerReceived)
 
     offerReject = len(Job.objects.filter(offerReject=1))
-    print("offerReject", offerReject)
 
 
     response = len(Job.objects.filter(response=1))
-    print("response", response)
 
 
     context ={

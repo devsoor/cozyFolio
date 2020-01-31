@@ -37,7 +37,7 @@ urlpatterns = [
     path('updateJob/<int:id>', views.updateJob),
     path('newJob/<int:id>', views.newJob),
     path('deleteJob/<int:id>', views.deleteJob),
-    path('deleteProject/<int:id>', views.deleteProject),
+    path('projectEdit/deleteProject/<int:id>', views.deleteProject),
     path('portfolioEdit/deletePortfolio/<int:id>', views.deletePortfolio),
 
 ]
