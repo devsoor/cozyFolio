@@ -21,6 +21,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'cozyfolio_app/static/media/')
 def index(request):
     return render(request, "index.html")
 
+def deleteProject(request, id):
+    to_delete = Project.objects.get(id = id)
+    to_delete.delete()
+    return redirect('/dashboard')
+
+def deletePortfolio(request, id):
+    to_delete = Portfolio.objects.get(id = id)
+    to_delete.delete()
+    return redirect('/dashboard')
+
 def registerUser(request):
     errors = User.objects.register_validator(request.POST)
     if len(errors) > 0:
@@ -172,10 +182,10 @@ def portfolioCreate(request):
     newName  = request.POST['portfolioFormName']
     newTitle = request.POST['portfolioFormJobTitle']
     newSummary = request.POST['portfolioFormSummary']
-    newResume = request.POST['portfolioFormResume']
+    # newResume = request.POST['portfolioFormResume']
     projList = request.POST.getlist('checks[]')
     newUser = User.objects.get(email = request.session['userEmail'])
-    newPort = Portfolio.objects.create(name = newName, title = newTitle, portfolioSummary = newSummary, resume = newResume,user = newUser)
+    newPort = Portfolio.objects.create(name = newName, title = newTitle, portfolioSummary = newSummary,user = newUser)
 
     for i in projList:
         if Project.objects.get(id = i) in newPort.project.all():

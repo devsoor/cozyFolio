@@ -38,6 +38,8 @@ urlpatterns = [
     path('jobStatistic', views.jobStatistic),
     path('updateJob/<int:id>', views.updateJob),
     path('newJob/<int:id>', views.newJob),
+    path('deleteProject/<int:id>', views.deleteProject),
+    path('portfolioEdit/deletePortfolio/<int:id>', views.deletePortfolio),
 
 ]
 
