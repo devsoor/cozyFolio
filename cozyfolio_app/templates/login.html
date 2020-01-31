@@ -25,47 +25,51 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form class="text-center border border-light p-5" action="login" method="post">
-                    {% csrf_token %}
-                    <p class="h4 mb-4">Sign in</p>
+                <div class="card card-cascade wider mb-4 wow fadeIn">
+                    <div class="card-body card-body-cascade text-left">
+                            <form class="text-center border border-light p-5" action="login" method="post">
+                                {% csrf_token %}
+                                <p class="h4 mb-4">Sign in</p>
 
-                    <!-- Email -->
-                    <input type="email" id="loginFormEmail" name="loginFormEmail" class="form-control mb-4" placeholder="E-mail">
+                                <!-- Email -->
+                                <input type="email" id="loginFormEmail" name="loginFormEmail" class="form-control mb-4" placeholder="E-mail">
 
-                    <!-- Password -->
-                    <input type="password" id="loginFormPassword" name="loginFormPassword" class="form-control mb-4" placeholder="Password">
+                                <!-- Password -->
+                                <input type="password" id="loginFormPassword" name="loginFormPassword" class="form-control mb-4" placeholder="Password">
 
-                    <div class="d-flex justify-content-around">
-                        <div>
-                            <!-- Remember me -->
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
-                                <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label>
-                            </div>
-                        </div>
-                        <div>
-                            <!-- Forgot password -->
-                            <a href="">Forgot password?</a>
-                        </div>
+                                <div class="d-flex justify-content-around">
+                                    <div>
+                                        <!-- Remember me -->
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
+                                            <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <!-- Forgot password -->
+                                        <a href="">Forgot password?</a>
+                                    </div>
+                                </div>
+
+                                <!-- Sign in button -->
+                                <button class="btn btn-info btn-block my-4" type="submit">Sign in</button>
+
+                                <!-- Register -->
+                                <p>Don't have an account?
+                                    <a href="register">Register</a>
+                                </p>
+
+                                <!-- Social login -->
+                                <p>or sign in with:</p>
+
+                                <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f light-blue-text"></i></a>
+                                <a href="#" class="mx-2" role="button"><i class="fab fa-twitter light-blue-text"></i></a>
+                                <a href="#" class="mx-2" role="button"><i class="fab fa-linkedin-in light-blue-text"></i></a>
+                                <a href="#" class="mx-2" role="button"><i class="fab fa-github light-blue-text"></i></a>
+
+                            </form>
                     </div>
-
-                    <!-- Sign in button -->
-                    <button class="btn btn-info btn-block my-4" type="submit">Sign in</button>
-
-                    <!-- Register -->
-                    <p>Don't have an account?
-                        <a href="register">Register</a>
-                    </p>
-
-                    <!-- Social login -->
-                    <p>or sign in with:</p>
-
-                    <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f light-blue-text"></i></a>
-                    <a href="#" class="mx-2" role="button"><i class="fab fa-twitter light-blue-text"></i></a>
-                    <a href="#" class="mx-2" role="button"><i class="fab fa-linkedin-in light-blue-text"></i></a>
-                    <a href="#" class="mx-2" role="button"><i class="fab fa-github light-blue-text"></i></a>
-
-                </form>
+                </div>
             </div>
         </div>
     </div>

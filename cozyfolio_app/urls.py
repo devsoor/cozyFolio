@@ -1,5 +1,8 @@
 from django.urls import path     
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('home', views.signin),	      
     path('', views.index),	      
@@ -12,14 +15,32 @@ urlpatterns = [
     path('forgotPasswordSendEmail', views.forgotPasswordSendEmail),
     path('setNewPassword', views.setNewPassword),
     path('dashboard', views.dashboard),
-    path('projectEdit/<int:id>', views.editProject),
-    # path('cozyfolio/portfolio//view/<int:id>', views.view_portfolio),
-    # path('cozyfolio/portfolio/new', views.new_portfolio),
-    # path('cozyfolio/portfolio/create', views.create_portfolio),
-    # path('cozyfolio/portfolio/edit/<int:id>', views.edit_portfolio),
-    # path('cozyfolio/portfolio/remove/<int:id>', views.remove_portfolio),
-    # path('cozyfolio/project/<int:id>', views.view_project),
-    # path('cozyfolio/project/new', views.new_project),
-    # path('cozyfolio/project/create', views.create_project),
-    # path('cozyfolio/project/remove/<int:id>', views.remove_project),
+    path('userProfile', views.userProfile),
+    path('userCreate', views.userCreate),
+    path('portfolioNew', views.portfolioNew),
+    path('portfolioCreate', views.portfolioCreate),
+    path('portfolioEdit/<int:id>', views.portfolioEdit),
+    path('portfolioEdit/portfolioUpdate/<int:id>', views.portfolioUpdate),
+    path('portfolioEdit/assignProject/<int:val>',views.assignProject),
+    path('pickPortfolio/<int:id>', views.pickPortfolio),
+    # path('portfolioSave/<int:id>', views.portfolioSave),
+    path('projectCreate', views.projectCreate),
+    path('projectNew', views.projectNew),
+    path('projectEdit/<int:id>', views.projectEdit),
+    path('projectEdit/projectUpdate/<int:id>', views.projectUpdate),
+    # path('projectSave/<int:id>', views.projectSave),
+    path('websitePreview', views.websitePreview),
+    path('websiteCreate', views.websiteCreate),
+    path('applyJob', views.applyJob),
+    path('viewJob', views.viewJob),
+    path('jobStatistic', views.jobStatistic),
+    path('updateJob/<int:id>', views.updateJob),
+    path('newJob/<int:id>', views.newJob),
+    path('deleteJob/<int:id>', views.deleteJob),
+    path('projectEdit/deleteProject/<int:id>', views.deleteProject),
+    path('portfolioEdit/deletePortfolio/<int:id>', views.deletePortfolio),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

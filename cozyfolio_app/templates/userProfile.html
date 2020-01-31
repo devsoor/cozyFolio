@@ -1,0 +1,238 @@
+{% extends "dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>CozyFolio</title>
+  {% load static %}
+  <!-- MDB icon -->
+  <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon">
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="/static/css/mdb.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="/static/css/style.min.css" rel="stylesheet">
+
+</head>
+
+<body class="grey lighten-3">
+  {% block content %}
+
+  <div class="container-fluid">
+    <div class="row wow fadeIn">
+      <div class="col-lg-8 col-md-12">
+        <div class="card card-cascade wider mb-4 wow fadeIn">
+          <div class="card-body card-body-cascade text-left">
+            <form action="userCreate" enctype="multipart/form-data" method="post" class="p-5">
+              {% csrf_token %}
+              <p class="h4 mb-4">User Profile</p>
+
+              <!-- Tab 1 - My info -->
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="myInfo-tab" data-toggle="tab" href="#myInfo" role="tab"
+                    aria-controls="myInfo" aria-selected="true">My info</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills"
+                    aria-selected="false">Skills</a>
+                </li>
+
+              </ul>
+              <div class="tab-content" id="myInfoTab">
+                <div class="tab-pane fade show active" id="myInfo" role="tabpanel" aria-labelledby="myInfo-tab">
+                  <div class="form-row mb-4">
+                    <div class="col">
+                      <label for="profileFormFirstName">First Name</label>
+                      <input type="text" value="{{this_user.firstName}}" id="profileFormFirstName"
+                        name="profileFormFirstName" class="form-control">
+                    </div>
+                    <div class="col">
+                      <label for="profileFormLastName">Last Name</label>
+                      <input type="text" value="{{this_user.lastName}}" id="profileFormLastName"
+                        name="profileFormLastName" class="form-control">
+                    </div>
+                  </div>
+
+                  <label for="profileFormEmail">Email</label>
+                  <input type="email" id="profileFormEmail" value="{{this_user.email}}" name="profileFormEmail"
+                    class="form-control mb-4">
+
+                  <label for="profileFormTitle">Title</label>
+                  <input type="text" id="profileFormTitle" name="profileFormTitle" class="form-control mb-4"
+                    placeholder="Title">
+
+                    <label for="profileFormTagline">Tag Line</label>
+                    <input type="text" id="profileFormTagline" name="profileFormTagline" class="form-control mb-4"
+                      placeholder="Tag">
+
+                  <label for="profileFormAddress">Address</label>
+                  <input type="text" id="profileFormAddress" name="profileFormAddress" class="form-control mb-4"
+                    placeholder="Address">
+
+                  <div class="form-row mb-3">
+                    <div class="col">
+                      <label for="countryId">Country</label>
+                      <select name="country" class="countries form-control mb-4" id="countryId">
+                        <option value="">Select Country</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <label for="stateId">State</label>
+                      <select name="state" class="states form-control mb-4" id="stateId">
+                        <option value="">Select State</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <label for="cityId">City</label>
+                      <select name="city" class="cities form-control mb-4" id="cityId">
+                        <option value="">Select City</option>
+                      </select>
+                    </div>
+                    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                    <script src="//geodata.solutions/includes/countrystatecity.js"></script>
+                  </div>
+
+                  <!-- Resume upload -->
+                  <div class="form-row mb-4">
+                    <div class="col-md-2">
+                      <label for="profileFormResume0">Resume</label>
+                    </div>
+                    <div class="col-md-6">
+                      <!-- {{pdfForm.as_p}} -->
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="profileFormResume0">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="profileFormResume" name="profileFormResume"
+                            aria-describedby="profileFormResume0">
+                          <label class="custom-file-label" for="profileFormResume">Choose file</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <form action="POST" enctype="multipart/form-data"> -->
+                  
+                    <!-- {{pdfForm -->
+                    <!-- <button>Submit</button> -->
+                  <!-- </form> -->
+                  <!-- <div>
+                    {{pdfForm.resume.url}}
+                    <a href={{pdfForm.resume.url}}">Download Resume</a>
+                  </div> -->
+
+                  <div class="form-row mb-4">
+                    <div class="col-md-2">
+                      <label for="profileFormHeadshot0">Photo</label>
+                    </div>
+                    <div class="col-md-6">
+                      <!-- {{ pdfForm.as_p }} -->
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="profileFormHeadshot0">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="profileFormHeadshot"
+                            name="profileFormHeadshot" aria-describedby="profileFormHeadshot0">
+                          <label class="custom-file-label" for="profileFormHeadshot">Choose file</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Social Media links -->
+                  <div class="form-row mb-4">
+                    <div class="col-md-2">
+                      <h2 class="fab fa-linkedin-in light-blue-text mx-3"></h2>
+                    </div>
+                    <div class="col-md-10">
+                      <input type="text" id="profileFormLinkedIn" name="profileFormLinkedIn" class="form-control mb-4"
+                        placeholder="URL">
+                    </div>
+                  </div>
+
+                  <div class="form-row mb-4">
+                    <div class="col-md-2">
+                      <h2 class="fab fa-github black-text mx-3"></h2>
+                    </div>
+                    <div class="col-md-10">
+                      <input type="text" id="profileFormGithub" name="profileFormGithub" class="form-control mb-4"
+                        placeholder="URL">
+                    </div>
+                  </div>
+
+                  <div class="form-row mb-4">
+                    <div class="col-md-2">
+                      <h2 class="fab fa-stack-overflow orange-text mx-3"></h2>
+                    </div>
+                    <div class="col-md-10">
+                      <input type="text" id="profileFormStackoverflow" name="profileFormStackoverflow"
+                        class="form-control mb-4" placeholder="URL">
+                    </div>
+                  </div>
+
+                  <label for="profileFormEmail">Professional Summary</label>
+                  <textarea class="form-control rounded-0" id="profileHighlight" name="profileHighlight"
+                    rows="8"></textarea>
+                </div>
+
+
+                <!-- Tab 2: Skills -->
+                <div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+                  <!-- Skills -->
+                  <div class="form-row mb-3">
+                    <div class="col">
+                      {{ formLanguages.as_table }}
+                    </div>
+                    <div class="col">
+                      {{ formFrameworks.as_table }}
+                    </div>
+                    <div class="col">
+                      {{ formDatabases.as_table }}
+                    </div>
+                    <div class="col">
+                      {{ formClouds.as_table }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-end">
+                <button class="btn btn-info" onclick="window.location.replace('/dashboard'); return false;"
+                  type="cancel">Cancel</button>
+                <button class="btn btn-info" type="submit">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="static/js/jquery.min.js"></script> -->
+  <script type="text/javascript" src="static/js/popper.min.js"></script>
+  <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="static/js/mdb.min.js"></script>
+  <script type="text/javascript"></script>
+
+</body>
+
+</html>
