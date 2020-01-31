@@ -92,11 +92,13 @@
                 {% endfor %}
               </ul>
               <div class="row justify-content-end">
-                <!-- <a href="/dashboard"><u>Cancel</u></a> -->
+
+                <a href="deletePortfolio/{{portfolio.id}}" class="btn btn-danger" role="button">Delete</a>
+
                 <button class="btn btn-info" onclick="window.location.replace('/dashboard'); return false;" type="cancel">Cancel</button>
                 <button class="btn btn-info" style="display: block;" type="submit">Save</button><br>
               </div><br>
-              <a style="display: block; text-align: center;" href="deletePortfolio/{{portfolio.id}}"><u>Delete</u></a>
+              <!-- <a style="display: block; text-align: center;" href="deletePortfolio/{{portfolio.id}}"><u>Delete</u></a> -->
             </form>
           </div>
         </div>

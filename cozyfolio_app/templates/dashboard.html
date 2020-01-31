@@ -115,7 +115,7 @@
       <a href="applyJob" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-business-time mr-3"></i>Job Tracker</a>
       {% for job in jobs %}
-        <a href="/updateJob/{{job.id}}" class="nav-link waves-effect text-white" target="">{{job.jobTitle}} ({{job.company}}</a>
+        <a href="/updateJob/{{job.id}}" class="nav-link waves-effect text-white" target="">{{job.jobTitle}} ({{job.company}})</a>
       {% endfor %}
       <a href="jobStatistic" class="list-group-item list-group-item-action waves-effect">
         <i class="fas fa-chart-bar mr-3"></i>Statistics</a>
@@ -232,7 +232,6 @@
                 <h4 class="card-title font-weight-bold indigo-text pb-5"><strong>{{this_user.firstName}}
                     {{this_user.lastName}}</strong></h4>
                 <form action=""></form>
-                <div class="input-group">
                   <!-- <div class="input-group-prepend">
                     <span class="input-group-text" id="portfolioFormResume">Upload</span>
                   </div> -->
@@ -243,17 +242,10 @@
                   </div> -->
                   <!-- <=====================================================================================================================================================================> -->
                   <div>
-                    <a href="/home/felix/Desktop/cozyFolio/cozyFolio/media/Felix_Almejo_2JKTvLR.pdf" target="_blank"
+                    <a href="{{this_user.resume}}" target="_blank"
                       download>Download Resume</a>
-                    <!-- {{resumes} -->
                   </div>
-                  <!-- <form action="POST" enctype="multipart/form-data"> 
-                    {% csrf_token %}
-                    {{pdfForm}}
-                    <input type="" value="{{pdfForm}}" id="profileFormResume" name="profileFormResume">
-                    <button>Submit</button> -->
                   </form>
-                </div>
               </div>
             </div>
           </div>
@@ -282,10 +274,10 @@
                     <div class="col-lg-4 col-md-12">
                       <div class="card card-cascade wider mb-4 wow fadeIn">
                         <!--Card image-->
-                        <div class="view view-cascade overlay">
+                        <!-- <div class="view view-cascade overlay">
                           <img src="{{proj.picImage}}" class="card-img-top" alt="wider">
 
-                        </div>
+                        </div> -->
                         <!--/Card image-->
 
                         <!--Card content-->

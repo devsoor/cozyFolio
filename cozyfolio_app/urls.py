@@ -3,8 +3,6 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-
-
 urlpatterns = [
     path('home', views.signin),	      
     path('', views.index),	      
@@ -38,10 +36,11 @@ urlpatterns = [
     path('jobStatistic', views.jobStatistic),
     path('updateJob/<int:id>', views.updateJob),
     path('newJob/<int:id>', views.newJob),
+    path('deleteJob/<int:id>', views.deleteJob),
     path('deleteProject/<int:id>', views.deleteProject),
     path('portfolioEdit/deletePortfolio/<int:id>', views.deletePortfolio),
 
 ]
 
-if settings:
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

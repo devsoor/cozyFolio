@@ -239,10 +239,10 @@
             <div class="col-lg-4 col-md-12">
               <div class="card card-cascade wider mb-4 wow fadeIn">
                 <!--Card image-->
-                <div class="view view-cascade overlay">
+                <!-- <div class="view view-cascade overlay">
                   <img src="{{proj.picImage}}" class="card-img-top" alt="wider">
 
-                </div>
+                </div> -->
                 <!--/Card image-->
 
                 <!--Card content-->
@@ -251,10 +251,7 @@
                   <h5 class="indigo-text"><strong>{{proj.name}}</strong></h5>
 
                   <p class="card-text">{{proj.summary}} </p>
-                  <form action="/projectEdit/{{proj.id}}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary mx-auto d-block">Edit</button>
-                  </form>
+            
                 </div>
               </div>
             </div>

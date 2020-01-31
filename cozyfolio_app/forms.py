@@ -112,4 +112,4 @@ class CloudsForm(forms.Form):
 class PDFForm(forms.ModelForm):
     class Meta:
         model= User
-        fields= ['resume'] 
+        fields= ['resume', 'headshot'] 

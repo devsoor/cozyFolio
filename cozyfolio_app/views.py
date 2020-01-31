@@ -14,10 +14,6 @@ import urllib.parse
 import os
 from datetime import datetime
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEDIA_ROOT = os.path.join(BASE_DIR, 'cozyfolio_app/static/media/')
-
 def index(request):
     return render(request, "index.html")
 
@@ -143,6 +139,11 @@ def dashboard(request):
     userPortfolios = this_user.portfolio.all()
     projects = Project.objects.all()
     jobs = Job.objects.all()
+    pdfForm = PDFForm(request.POST, request.FILES)
+    if pdfForm.is_valid():
+        pdfForm.save()
+    else:
+        pdfForm = PDFForm()
 
     all_resumes = this_user.resume
     print(all_resumes)
@@ -294,7 +295,7 @@ def userProfile(request):
     formFrameworks = FrameworksForm
     formDatabases = DatabasesForm
     formClouds = CloudsForm
-    pdfForm = PDFForm()
+    pdfForm = PDFForm(request.POST, request.FILES)
     this_user = User.objects.get(email=request.session['userEmail'])
     all_res = this_user.resume
     print("=============================================all_res",all_res)
@@ -358,14 +359,18 @@ def userCreate(request):
         formDatabases = DatabasesForm(request.POST)
         formClouds = CloudsForm(request.POST)
 
-        uploaded_file = request.FILES['profileFormResume']
-        print("======================== uploaded file",uploaded_file)
-        fs = FileSystemStorage()
-        name = fs.save(uploaded_file.name, uploaded_file)
-        this_user.resume = fs.url(name)
-        print("======================== this_user.resume file",this_user.resume)
+        # uploaded_file = request.FILES['profileFormResume']
+        # print("======================== uploaded file",uploaded_file)
+        # fs = FileSystemStorage()
+        # name = fs.save(uploaded_file.name, uploaded_file)
+        # this_user.resume = fs.url(name)
+        # print("======================== this_user.resume file",this_user.resume)
 
-
+        pdfForm = PDFForm(request.POST, request.FILES)
+        if pdfForm.is_valid():
+            pdfForm.save()
+        else:
+            pdfForm = PDFForm()
         # if request.method =='POST':
         #     resumefile = request.FILES['profileFormResume']
         #     fs = FileSystemStorage()
@@ -375,10 +380,10 @@ def userCreate(request):
 
         # request.session['requestFiles'] = request.FILES
 
-        headshotfile = request.FILES['profileFormHeadshot']
-        fs = FileSystemStorage()
-        headshot_filename = fs.save(headshotfile.name, headshotfile)
-        this_user.headshot = fs.url(headshot_filename)
+        # headshotfile = request.FILES['profileFormHeadshot']
+        # fs = FileSystemStorage()
+        # headshot_filename = fs.save(headshotfile.name, headshotfile)
+        # this_user.headshot = fs.url(headshot_filename)
 
         if formLanguages.is_valid():
             languages = formLanguages.cleaned_data.get('languages')
@@ -564,3 +569,9 @@ def jobStatistic(request):
     }
 
     return render(request,"jobStatistic.html", context)
+
+
+def deleteJob(request, id):
+    to_delete = Job.objects.get(id = id)
+    to_delete.delete()
+    return redirect('/dashboard')

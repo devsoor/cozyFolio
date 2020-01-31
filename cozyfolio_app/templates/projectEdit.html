@@ -53,11 +53,12 @@
               <label for="projectFormURL">URL for Project</label>
               <input type="text" id="projectFormURL" value="{{project.url}}" name="projectFormURL" class="form-control mb-4">
               <div class="row justify-content-end">
+                <a href="deleteProject/{{project.id}}" class="btn btn-danger" role="button">Delete</a>
                 <button class="btn btn-info" type="cancel">Cancel</button>
                 <button class="btn btn-info" type="submit">Save</button>
               </div>
               <br>
-              <a style="display: block; text-align: center;" href="/deleteProject/{{project.id}}"><u>Delete</u></a>
+              <!-- <a style="display: block; text-align: center;" href="/deleteProject/{{project.id}}"><u>Delete</u></a> -->
             </form>
           </div>
         </div>

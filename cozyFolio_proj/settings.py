@@ -71,10 +71,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cozyFolio_proj.wsgi.application'
 
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-print(MEDIA_ROOT,"==============================================================>>>>>>>>")
-print(BASE_DIR)
+MEDIA_URL = '/media/'
+
+print("==============================================================>>>>>>>> MEDIA_ROOT", MEDIA_ROOT)
+print("==============================================================>>>>>>>> BASE_DIR", BASE_DIR)
 print("================================MEDIA URL Is =",MEDIA_URL)
 
 
